@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
-import { LayoutGrid, Info, Settings, LogOut, FileSearch, Users} from 'lucide-vue-next';
+import { LayoutGrid, Inbox, Info, Settings, LogOut, FileSearch, Users} from 'lucide-vue-next';
 import { MenuItem } from '@/types';
 
 export function useAppLayout() {
@@ -23,7 +23,7 @@ export function useAppLayout() {
         },
         {
             label: 'Surat Masuk',
-            lucideIcon: Users,
+            lucideIcon: Inbox,
             route: route('surat-masuk.index'),
             active: currentRoute.value == 'users',
         },
