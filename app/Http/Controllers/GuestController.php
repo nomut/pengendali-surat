@@ -16,9 +16,19 @@ class GuestController extends Controller
         ]);
     }
 
-    public function programKerja()
+    public function kelompokKerja($pok = 'pokja-1')
     {
-        return Inertia::render('blog/ProgramKerja', [
+        if($pok=='pokja-1'){
+            $page = 'blog/KelompokKerja1';
+        }elseif($pok=='pokja-2'){
+            $page = 'blog/KelompokKerja2';
+        }elseif($pok=='pokja-3'){
+            $page = 'blog/KelompokKerja3';
+        }elseif($pok=='pokja-4'){
+            $page = 'blog/KelompokKerja4';
+        }
+
+        return Inertia::render($page, [
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
         ]);

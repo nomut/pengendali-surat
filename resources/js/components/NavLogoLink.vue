@@ -9,7 +9,7 @@ import ApplicationLogo from '@/components/ApplicationLogo.vue';
         variant="link"
         as="InertiaLink"
     >
-        <ApplicationLogo class="text-sky-500 group-hover:text-sky-600 transition-colors duration-300" />
+        <ApplicationLogo class="w-12 h-12 text-sky-500 group-hover:text-sky-600 transition-colors duration-300" />
         <span class="font-bold">PKK DIY</span>
     </Button>
 </template>

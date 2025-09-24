@@ -7,7 +7,7 @@ import FlashMessages from '@/components/FlashMessages.vue';
     <Container class="min-h-svh flex flex-col justify-center items-center">
         <div class="mb-6">
             <InertiaLink href="/">
-                <ApplicationLogo class="w-12 h-12 fill-current text-surface-900 dark:text-surface-0" />
+                <ApplicationLogo class="w-36 h-36 fill-current text-surface-900 dark:text-surface-0" />
             </InertiaLink>
         </div>
         <FlashMessages class="w-full sm:max-w-lg" />

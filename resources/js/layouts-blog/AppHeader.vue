@@ -1,9 +1,15 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+
+import ApplicationLogo from '@/components/ApplicationLogo.vue';
 import Button from 'primevue/button';
+import Menubar from '@/components/primevue/menu/Menubar.vue';
+import ClientOnly from '@/components/ClientOnly.vue';
+import PanelMenu from '@/components/primevue/menu/PanelMenu.vue';
+
 import {
-    LogIn, UserPlus, Home, Landmark, ListChecks, Menu
+    Home, Landmark, ListChecks, Menu, CircleChevronRight
 } from 'lucide-vue-next';
 
 defineProps({
@@ -11,39 +17,113 @@ defineProps({
     canRegister: Boolean,
 });
 
-// Mendefinisikan event yang bisa dipancarkan oleh komponen ini
-const emit = defineEmits(['toggle-menu']);
-
 const page = usePage();
+const mobileMenuOpen = ref(false);
+
+const toggleMobileMenu = () => {
+    mobileMenuOpen.value = !mobileMenuOpen.value;
+};
 
 const menuItems = ref([
-    { label: 'Beranda', route: 'home', icon: Home },
-    { label: 'Profil Organisasi', route: 'profil-organisasi', icon: Landmark },
-    { label: 'Program Kerja', route: 'program-kerja', icon: ListChecks },
+    { 
+        label: 'Beranda', 
+        route: route('home'), 
+        lucideIcon: Home 
+    },
+    {
+        label: 'Pokja PKK',
+        lucideIcon: ListChecks,
+        items: [
+            {
+                label: 'Pokja I',
+                route: route('kelompok-kerja', {kelompokKerja:'pokja-1'}),
+                lucideIcon: CircleChevronRight,
+            },
+            {
+                label: 'Pokja II',
+                route: route('kelompok-kerja', {kelompokKerja:'pokja-2'}),
+                lucideIcon: CircleChevronRight,
+            },
+            {
+                label: 'Pokja III',
+                route: route('kelompok-kerja', {kelompokKerja:'pokja-3'}),
+                lucideIcon: CircleChevronRight,
+            },
+            {
+                label: 'Pokja IV',
+                route: route('kelompok-kerja', {kelompokKerja:'pokja-4'}),
+                lucideIcon: CircleChevronRight,
+            },
+        ],
+    },
+    { 
+        label: 'Profil Organisasi', 
+        route: route('profil-organisasi'), 
+        lucideIcon: Landmark 
+    },
 ]);
+
 </script>
 
 <template>
+    <ClientOnly>
+        <Teleport to="body">
+            <!-- Mobile drawer menu -->
+            <Drawer
+                v-model:visible="mobileMenuOpen"
+                position="right"
+            >
+                <div>
+                    <PanelMenu
+                        :model="menuItems"
+                        class="mt-1 w-full"
+                    >
+                    </PanelMenu>
+                </div>
+                <template #footer>
+                    <div class="flex flex-col">
+                        <template v-if="page.props.auth.user">
+                            <InertiaLink :href="route('dashboard')" @click="toggleMobileMenu">
+                                <Button label="Dashboard" class="w-full" />
+                            </InertiaLink>
+                        </template>
+                        <template v-else>
+                            <InertiaLink :href="route('login')" class="block mb-3" @click="toggleMobileMenu">
+                                <Button label="Login" class="w-full futuristic-button-light" />
+                            </InertiaLink>
+                            <InertiaLink :href="route('register')" @click="toggleMobileMenu">
+                                <Button label="Register" outlined class="w-full !border-sky-500 !text-sky-500" />
+                            </InertiaLink>
+                        </template>
+                    </div>
+                </template>
+            </Drawer>
+            <ScrollTop
+                :buttonProps="{ class: 'fixed! right-4! bottom-4! md:right-8! md:bottom-8! z-[1000]!', rounded: true, raised: true }"
+            />
+        </Teleport>
+    </ClientOnly>
+
     <header class="frosted-glass-header sticky top-0 z-40">
         <div class="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
             <InertiaLink :href="route('home')" class="flex items-center space-x-2 group">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-sky-500 group-hover:text-sky-600 transition-colors duration-300">
-                    <path d="M12 2L3 22H21L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    <path d="M12 14L8 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 14L16 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 14V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span class="text-xl font-bold tracking-wider text-slate-900 group-hover:text-black transition-colors duration-300">
+                <ApplicationLogo class="w-14 h-14 fill-current text-surface-900 dark:text-surface-0" />
+                <span class="text-2xl font-bold tracking-wider text-slate-900 group-hover:text-black transition-colors duration-300">
                     PKK DIY
                 </span>
             </InertiaLink>
             
             <nav class="hidden md:flex items-center space-x-8">
-                <InertiaLink v-for="item in menuItems" :key="item.label" :href="item.route === '#' ? '#' : route(item.route)" class="nav-link-light">
-                    <span>{{ item.label }}</span>
-                </InertiaLink>
+                <Menubar
+                    :model="menuItems"
+                    class="text-lg"
+                    pt:root:class="px-0 py-4 border-0 rounded-none  bg-transparent"
+                    pt:button:class="hidden"
+                >
+                </Menubar>
             </nav>
+
             <div class="hidden md:flex items-center space-x-2">
                 <template v-if="page.props.auth.user">
                     <InertiaLink :href="route('dashboard')">
@@ -60,7 +140,7 @@ const menuItems = ref([
                 </template>
             </div>
             <div class="md:hidden">
-                <Button text rounded aria-label="Toggle Menu" @click="emit('toggle-menu')" class="!p-2 text-slate-800" >
+                <Button text rounded aria-label="Toggle Menu" @click="toggleMobileMenu" class="!p-2 text-slate-800" >
                     <Menu class="w-6 h-6" />
                 </Button>
             </div>

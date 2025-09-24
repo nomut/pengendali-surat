@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [GuestController::class, "home"])->name('home');
-Route::get('/program-kerja', [GuestController::class, "programKerja"])->name('program-kerja');
+Route::get('/kelompok-kerja/{kelompokKerja?}', [GuestController::class, "kelompokKerja"])->name('kelompok-kerja');
 Route::get('/profil-organisasi', [GuestController::class, "profilOrganisasi"])->name('profil-organisasi');
 
 Route::middleware(['auth', 'verified'])->group(function () {

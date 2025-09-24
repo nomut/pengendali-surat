@@ -2,10 +2,13 @@
 import { usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import Button from 'primevue/button';
-import AppHeader from '@/layouts-blog/AppHeader.vue'; // Diubah dari './AppHeader.vue' menjadi '@/'
-import AppFooter from '@/layouts-blog/AppFooter.vue'; // Diubah dari './AppFooter.vue' menjadi '@/'
+import ClientOnly from '@/components/ClientOnly.vue';
+
+import AppHeader from '@/layouts-blog/AppHeader.vue';
+import AppFooter from '@/layouts-blog/AppFooter.vue';
+
 import {
-    Home, Landmark, ListChecks, Menu, X // Impor ikon untuk menu mobile
+    Home, Landmark, ListChecks, Menu, ChevronsUpDown
 } from 'lucide-vue-next';
 
 defineProps({
@@ -14,63 +17,10 @@ defineProps({
     laravelVersion: String,
     phpVersion: String,
 });
-
-// Logika untuk menu mobile sekarang dikelola di layout ini
-const page = usePage();
-const isMobileMenuOpen = ref(false);
-
-const toggleMobileMenu = () => {
-    isMobileMenuOpen.value = !isMobileMenuOpen.value;
-};
-
-const menuItems = ref([
-    { label: 'Halaman Utama', route: 'home', icon: Home },
-    { label: 'Profil Organisasi', route: 'profil-organisasi', icon: Landmark },
-    { label: 'Program Kerja', route: 'program-kerja', icon: ListChecks },
-]);
 </script>
 
 <template>
     <div>
-        <transition
-            enter-active-class="transition ease-in-out duration-300 transform"
-            enter-from-class="-translate-x-full"
-            enter-to-class="translate-x-0"
-            leave-active-class="transition ease-in-out duration-300 transform"
-            leave-from-class="translate-x-0"
-            leave-to-class="-translate-x-full"
-        >
-            <div v-if="isMobileMenuOpen" class="fixed inset-0 z-50 flex md:hidden">
-                <div @click="toggleMobileMenu" class="fixed inset-0 bg-black/30"></div>
-                <div class="relative w-4/5 max-w-xs h-full bg-slate-50/80 backdrop-blur-md p-6 shadow-xl">
-                    <div class="flex justify-between items-center mb-8">
-                        <span class="text-xl font-bold text-slate-900">Menu</span>
-                        <Button text rounded @click="toggleMobileMenu" class="!p-2 text-slate-800"> <X class="w-6 h-6" /> </Button>
-                    </div>
-                    <nav class="flex flex-col space-y-4">
-                        <InertiaLink v-for="item in menuItems" :key="item.label" :href="item.route === '#' ? '#' : route(item.route)" class="text-lg text-slate-700 hover:text-sky-600 py-2" @click="toggleMobileMenu" >
-                            {{ item.label }}
-                        </InertiaLink>
-                    </nav>
-                    <div class="border-t border-slate-900/10 mt-6 pt-6">
-                        <template v-if="page.props.auth.user">
-                            <InertiaLink :href="route('dashboard')" @click="toggleMobileMenu">
-                                <Button label="Dashboard" class="w-full" />
-                            </InertiaLink>
-                        </template>
-                        <template v-else>
-                            <InertiaLink :href="route('login')" class="block mb-3" @click="toggleMobileMenu">
-                                <Button label="Login" class="w-full futuristic-button-light" />
-                            </InertiaLink>
-                            <InertiaLink :href="route('register')" @click="toggleMobileMenu">
-                                <Button label="Register" outlined class="w-full !border-sky-500 !text-sky-500" />
-                            </InertiaLink>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        </transition>
-
         <div class="scroll-container">
             <div class="relative font-sans text-slate-800">
                 <div class="light-futuristic-bg">
@@ -82,13 +32,12 @@ const menuItems = ref([
                 <div class="relative z-10">
                     <AppHeader 
                         :can-login="canLogin" 
-                        :can-register="canRegister" 
-                        @toggle-menu="toggleMobileMenu" 
+                        :can-register="canRegister"
                     />
                     
                     <slot />
 
-                    <AppFooter :laravel-version="laravelVersion" :php-version="phpVersion" />
+                    <AppFooter />
                 </div>
             </div>
         </div>
@@ -96,7 +45,7 @@ const menuItems = ref([
 </template>
 
 <style>
-/* ... CSS lainnya dari file Anda tetap sama ... */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 :root {
     --bg-light: #f8fafc;
@@ -189,5 +138,15 @@ header a:visited span {
 
 header a:visited svg {
     color:#0d76b6;
+}
+
+.custom-shape-divider-bottom-light {
+    position: absolute; bottom: -1px; left: 0; width: 100%; overflow: hidden; line-height: 0; transform: rotate(0);
+}
+.custom-shape-divider-bottom-light svg {
+    position: relative; display: block; width: calc(100% + 1.3px); height: 80px;
+}
+.custom-shape-divider-bottom-light .shape-fill {
+    fill: #f9fefe;
 }
 </style>
