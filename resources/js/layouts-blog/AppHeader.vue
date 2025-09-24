@@ -57,6 +57,11 @@ const menuItems = ref([
         ],
     },
     { 
+        label: 'Struktur Organisasi', 
+        route: route('struktur-organisasi'), 
+        lucideIcon: Landmark 
+    },
+    { 
         label: 'Profil Organisasi', 
         route: route('profil-organisasi'), 
         lucideIcon: Landmark 

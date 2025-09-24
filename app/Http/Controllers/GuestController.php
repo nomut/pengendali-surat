@@ -34,6 +34,13 @@ class GuestController extends Controller
         ]);
     }
 
+    public function strukturOrganisasi() {
+        return Inertia::render('blog/StrukturOrganisasi', [
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
+    }
+
     public function profilOrganisasi()
     {
         return Inertia::render('blog/ProfilOrganisasi', [
