@@ -62,7 +62,7 @@ const vAnimateOnScroll = {
                     <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                         <div v-animate-on-scroll class="animate-on-scroll">
                             <h2 class="text-3xl font-bold text-slate-800 mb-4">Sejarah Singkat</h2>
-                            <p class="text-slate-600 space-y-4">
+                            <p class="tracking-wide leading-normal text-slate-600 space-y-4">
                                 Gerakan Pemberdayaan dan Kesejahteraan Keluarga (PKK) sebagai gerakan pembangunan masyarakat bermula dari seminar Home Economic di Bogor pada tahun 1957. Sebagai tindak lanjut dari seminar tersebut, pada tahun 1961 panitia penyusunan tata susunan pelajaran pada Pendidikan Kesejahteraan Keluarga (PKK) Kementerian Pendidikan.
                                 <br><br>
                                 Di Daerah Istimewa Yogyakarta, gerakan ini telah menjadi tulang punggung dalam upaya peningkatan kualitas hidup keluarga, adaptif terhadap perubahan zaman, dan terus berinovasi untuk memberdayakan perempuan dan masyarakat secara luas.
@@ -83,14 +83,14 @@ const vAnimateOnScroll = {
                                 <Target class="w-8 h-8 text-sky-600" />
                             </div>
                             <h2 class="text-2xl font-bold text-slate-800 mb-2">Visi</h2>
-                            <p class="text-slate-600">Terwujudnya keluarga yang beriman dan bertaqwa kepada Tuhan Yang Maha Esa, berakhlak mulia dan berbudi luhur, sehat sejahtera, maju dan mandiri, kesetaraan dan keadilan gender serta kesadaran hukum dan lingkungan.</p>
+                            <p class="tracking-wide leading-normal text-slate-600">Terwujudnya keluarga yang beriman dan bertaqwa kepada Tuhan Yang Maha Esa, berakhlak mulia dan berbudi luhur, sehat sejahtera, maju dan mandiri, kesetaraan dan keadilan gender serta kesadaran hukum dan lingkungan.</p>
                         </div>
                         <div v-animate-on-scroll class="animate-on-scroll frosted-glass-card rounded-2xl p-8 text-center" style="transition-delay: 200ms">
                             <div class="inline-flex p-4 bg-sky-100 rounded-full mb-4">
                                 <ClipboardCheck class="w-8 h-8 text-sky-600" />
                             </div>
                             <h2 class="text-2xl font-bold text-slate-800 mb-2">Misi</h2>
-                            <p class="text-slate-600">Meningkatkan kualitas sumber daya manusia, memperkuat ketahanan ekonomi keluarga, serta melestarikan lingkungan hidup sambil meningkatkan kesadaran hukum dan partisipasi masyarakat.</p>
+                            <p class="tracking-wide leading-normal text-slate-600">Meningkatkan kualitas sumber daya manusia, memperkuat ketahanan ekonomi keluarga, serta melestarikan lingkungan hidup sambil meningkatkan kesadaran hukum dan partisipasi masyarakat.</p>
                         </div>
                     </div>
                 </div>
