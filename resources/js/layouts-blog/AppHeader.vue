@@ -9,7 +9,7 @@ import ClientOnly from '@/components/ClientOnly.vue';
 import PanelMenu from '@/components/primevue/menu/PanelMenu.vue';
 
 import {
-    Home, Landmark, ListChecks, Menu, CircleChevronRight
+    Home, Landmark, ListChecks, Menu, CircleChevronRight, Network
 } from 'lucide-vue-next';
 
 defineProps({
@@ -59,7 +59,7 @@ const menuItems = ref([
     { 
         label: 'Struktur Organisasi', 
         route: route('struktur-organisasi'), 
-        lucideIcon: Landmark 
+        lucideIcon: Network 
     },
     { 
         label: 'Profil Organisasi', 
