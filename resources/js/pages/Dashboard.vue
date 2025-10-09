@@ -104,7 +104,7 @@ const formatDate = (value) => {
                         <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
                         <Column bodyClass="text-center">
                             <template #body="{ data }">
-                                <Link :href="route('surat-keluar.show', data.id)">
+                                <Link :href="route('surat-masuk.show', data.id)">
                                     <Button class="p-button-rounded p-button-link" v-tooltip.top="'Lihat Detail'">
                                         <Eye class="w-4 h-4" />
                                     </Button>
