@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Link } from '@inertiajs/vue3';
-import { Users, Mail, Send } from 'lucide-vue-next';
+import { Link, router } from '@inertiajs/vue3';
+import { Users, Mail, Send, Eye } from 'lucide-vue-next';
 
 // Impor komponen PrimeVue
 import Card from 'primevue/card';
@@ -95,11 +95,20 @@ const formatDate = (value) => {
                     <h3 class="text-lg font-semibold mb-4">Surat Masuk Terbaru</h3>
                     <DataTable :value="latestSuratMasuk" stripedRows tableStyle="min-width: 20rem">
                         <template #empty>Belum ada surat masuk.</template>
-                        <Column field="pengirim" header="Pengirim"></Column>
-                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
                         <Column field="tanggal_diterima" header="Tanggal">
                             <template #body="{ data }">
                                 {{ formatDate(data.tanggal_diterima) }}
+                            </template>
+                        </Column>
+                        <Column field="pengirim" header="Pengirim"></Column>
+                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
+                        <Column bodyClass="text-center">
+                            <template #body="{ data }">
+                                <Link :href="route('surat-keluar.show', data.id)">
+                                    <Button class="p-button-rounded p-button-link" v-tooltip.top="'Lihat Detail'">
+                                        <Eye class="w-4 h-4" />
+                                    </Button>
+                                </Link>
                             </template>
                         </Column>
                     </DataTable>
@@ -111,11 +120,20 @@ const formatDate = (value) => {
                     <h3 class="text-lg font-semibold mb-4">Surat Keluar Terbaru</h3>
                     <DataTable :value="latestSuratKeluar" stripedRows tableStyle="min-width: 20rem">
                         <template #empty>Belum ada surat keluar.</template>
-                        <Column field="tujuan" header="Tujuan"></Column>
-                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
                         <Column field="tanggal_surat" header="Tanggal">
                             <template #body="{ data }">
                                 {{ formatDate(data.tanggal_surat) }}
+                            </template>
+                        </Column>
+                        <Column field="tujuan" header="Tujuan"></Column>
+                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
+                        <Column bodyClass="text-center">
+                            <template #body="{ data }">
+                                <Link :href="route('surat-keluar.show', data.id)">
+                                    <Button class="p-button-rounded p-button-link" v-tooltip.top="'Lihat Detail'">
+                                        <Eye class="w-4 h-4" />
+                                    </Button>
+                                </Link>
                             </template>
                         </Column>
                     </DataTable>
@@ -127,11 +145,20 @@ const formatDate = (value) => {
                     <h3 class="text-lg font-semibold mb-4">Surat Tugas Terbaru</h3>
                     <DataTable :value="latestSuratTugas" stripedRows tableStyle="min-width: 20rem">
                         <template #empty>Belum ada surat tugas.</template>
-                        <Column field="tujuan" header="Tujuan"></Column>
-                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
                         <Column field="tanggal_surat" header="Tanggal">
                             <template #body="{ data }">
                                 {{ formatDate(data.tanggal_surat) }}
+                            </template>
+                        </Column>
+                        <Column field="tujuan" header="Tujuan"></Column>
+                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
+                        <Column bodyClass="text-center">
+                            <template #body="{ data }">
+                                <Link :href="route('surat-tugas.show', data.id)">
+                                    <Button class="p-button-rounded p-button-link" v-tooltip.top="'Lihat Detail'">
+                                        <Eye class="w-4 h-4" />
+                                    </Button>
+                                </Link>
                             </template>
                         </Column>
                     </DataTable>

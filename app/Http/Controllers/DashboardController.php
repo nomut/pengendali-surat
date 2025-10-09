@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
+use App\Models\SuratTugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,11 +16,11 @@ class DashboardController extends Controller
         $totalUsers = User::count();
         $totalSuratMasuk = SuratMasuk::count();
         $totalSuratKeluar = SuratKeluar::count();
-        $totalSuratTugas = SuratKeluar::count();
+        $totalSuratTugas = SuratTugas::count();
 
         $latestSuratMasuk = SuratMasuk::latest()->take(5)->get();
         $latestSuratKeluar = SuratKeluar::latest()->take(5)->get();
-        $latestSuratTugas = SuratKeluar::latest()->take(5)->get();
+        $latestSuratTugas = SuratTugas::latest()->take(5)->get();
 
 
         // --- DATA DUMMY (untuk sementara, jika model belum ada) ---
