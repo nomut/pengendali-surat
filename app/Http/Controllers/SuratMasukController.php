@@ -2,121 +2,183 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\SuratMasuk;
-use Carbon\Carbon;
+use App\Models\File;
+use App\Models\SuratMasuk; // Gunakan model SuratMasuk
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
+use Illuminate\Container\Attributes\Storage;
+use Illuminate\Support\Facades\DB;
 
 class SuratMasukController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private $tagType = 'surat-masuk';
+
+    public function index(Request $request)
     {
+        $suratMasuk = SuratMasuk::query()
+            ->with(['tags' => fn ($query) => $query->where('type', $this->tagType)])
+            ->withCount('files')
+            ->when($request->input('nomor_surat'), 
+                fn ($query, $val) => $query->where('nomor_surat', 'like', "%{$val}%")
+            )
+            ->when($request->input('pengirim'), 
+                fn ($query, $val) => $query->where('pengirim', 'like', "%{$val}%")
+            )
+            ->when($request->input('perihal'), 
+                fn ($query, $val) => $query->where('perihal', 'like', "%{$val}%")
+            )
+            ->when($request->input('tanggal_diterima'), 
+                fn ($query, $tanggal) => $query->whereDate('tanggal_diterima', '=', Carbon::parse($tanggal)->toDateString())
+            )
+            ->when($request->input('status_disposisi'), 
+                fn ($query, $val) => $query->where('status_disposisi', $val)
+            )
+            ->when($request->input('tags') && is_array($request->input('tags')), 
+                fn ($query) => $query->withAllTags($request->input('tags'))
+            )
+            ->when($request->input('sortField'), function ($query, $sortField) use ($request) {
+                $sortOrder = $request->input('sortOrder') == -1 ? 'desc' : 'asc';
+                $query->orderBy($sortField, $sortOrder);
+            }, function ($query) {
+                $query->latest();
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+        
+        $filters = $request->only(['nomor_surat', 'pengirim', 'perihal', 'tags', 'sortField', 'sortOrder']);
+
+        if (isset($filters['sortOrder'])) {
+            $filters['sortOrder'] = (int)$filters['sortOrder'];
+        }
+
         return Inertia::render('surat-masuk/Index', [
-            'suratMasuk' => SuratMasuk::paginate(10),
+            'suratMasuk' => $suratMasuk,
+            'filters' => $filters
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        // Method ini akan merender halaman Vue yang baru kita buat
         return Inertia::render('surat-masuk/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
+            'nomor_surat' => 'required|string|max:255',
             'tanggal_surat' => 'required|date',
             'tanggal_diterima' => 'required|date',
             'penerima' => 'required|string|max:255',
             'pengirim' => 'required|string|max:255',
-            'nomor_surat' => 'required|string|max:255',
             'perihal' => 'required|string',
-            'lampiran' => 'nullable|string|max:255',
-            'status_disposisi' => 'required|string|in:Belum Didisposisi,Sudah Didisposisi',
+            'lampiran' => 'nullable|array', // Validasi 'lampiran' sebagai array
+            'lampiran.*' => 'integer|exists:files,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|max:50',
         ]);
 
-        SuratMasuk::create([
-            'tanggal_surat'   => Carbon::parse($request->tanggal_surat)->format('Y-m-d H:i:s'),
-            'tanggal_diterima'=> Carbon::parse($request->tanggal_diterima)->format('Y-m-d H:i:s'),
-            'penerima'        => $request->penerima,
-            'pengirim'        => $request->pengirim,
-            'nomor_surat'     => $request->nomor_surat,
-            'perihal'         => $request->perihal,
-            'lampiran'        => $request->lampiran,
-            'status_disposisi' => $request->status_disposisi,
-        ]);
+        $validated['tanggal_surat'] = Carbon::parse($request->tanggal_surat)->format('Y-m-d H:i:s');
+        $validated['tanggal_diterima'] = Carbon::parse($request->tanggal_diterima)->format('Y-m-d H:i:s');
+
         
+        $suratMasuk = SuratMasuk::create(array_merge($validated, ['lampiran'=>'test']));
+
+        if (!empty($validated['lampiran'])) {
+            File::whereIn('id', $validated['lampiran'])
+            ->update([
+                'fileable_id' => $suratMasuk->id,
+                'fileable_type' => SuratMasuk::class
+            ]);
+        }
+
+        if (!empty($request->tags)) {
+            $uniqueTags = collect($request->tags)->unique()->values()->all();
+            $suratMasuk->attachTags($uniqueTags, $this->tagType);
+        }
+
         return Redirect::route('surat-masuk.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(SuratMasuk $suratMasuk)
     {
+        $suratMasuk->load([
+            'files', 
+            'tags' => fn ($query) => $query->where('type', $this->tagType)
+        ]);
+
         return Inertia::render('surat-masuk/Show', [
             'surat' => $suratMasuk
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(SuratMasuk $suratMasuk)
     {
+        $suratMasuk->load([
+            'files', 
+            'tags' => fn ($query) => $query->where('type', $this->tagType)
+        ]);
+        
         return Inertia::render('surat-masuk/Edit', [
             'surat' => $suratMasuk
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, SuratMasuk $suratMasuk)
     {
-        $request->validate([
+        $validated = $request->validate([
+            'nomor_surat' => 'required|string|max:255',
             'tanggal_surat' => 'required|date',
             'tanggal_diterima' => 'required|date',
-            'penerima' => 'required|string|max:255',
             'pengirim' => 'required|string|max:255',
-            'nomor_surat' => 'required|string|max:255',
             'perihal' => 'required|string',
-            'lampiran' => 'nullable|string|max:255',
-            'status_disposisi' => 'required|string|in:Belum Didisposisi,Sudah Didisposisi',
+            'lampiran' => 'nullable|array',
+            'lampiran.*' => 'integer|exists:files,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|max:50',
         ]);
-        
-        $suratMasuk->update([
-            'tanggal_surat'   => Carbon::parse($request->tanggal_surat)->format('Y-m-d H:i:s'),
-            'tanggal_diterima'=> Carbon::parse($request->tanggal_diterima)->format('Y-m-d H:i:s'),
-            'penerima'        => $request->penerima,
-            'pengirim'        => $request->pengirim,
-            'nomor_surat'     => $request->nomor_surat,
-            'perihal'         => $request->perihal,
-            'lampiran'        => $request->lampiran,
-            'status_disposisi' => $request->status_disposisi,
-        ]);
+
+        $validated['tanggal_surat'] = Carbon::parse($request->tanggal_surat)->format('Y-m-d H:i:s');
+        $validated['tanggal_diterima'] = Carbon::parse($request->tanggal_diterima)->format('Y-m-d H:i:s');
+
+        // Gunakan transaksi database untuk memastikan integritas data
+        DB::transaction(function () use ($suratMasuk, $validated, $request) {
+            $suratMasuk->update($validated);
+
+            $tagsToSync = !empty($request->tags) ? collect($request->tags)->unique()->all() : [];
+            
+            $suratMasuk->syncTagsWithType($tagsToSync, $this->tagType);
+
+            $finalFileIds = $validated['lampiran'] ?? [];
+            $currentFileIds = $suratMasuk->files()->pluck('id')->all();
+
+            $filesToDeleteIds = array_diff($currentFileIds, $finalFileIds);
+            
+            if (!empty($filesToDeleteIds)) {
+                $filesToDelete = File::find($filesToDeleteIds);
+                foreach ($filesToDelete as $file) {
+                    Storage::disk('public')->delete($file->path);
+                    $file->delete();
+                }
+            }
+            
+            // Asosiasikan file baru atau yang sudah ada dengan SuratMasuk
+            if (!empty($finalFileIds)) {
+                File::whereIn('id', $finalFileIds)->update([
+                    'fileable_id' => $suratMasuk->id,
+                    'fileable_type' => SuratMasuk::class
+                ]);
+            }
+        });
 
         return Redirect::route('surat-masuk.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(SuratMasuk $suratMasuk)
     {
         $suratMasuk->delete();
-
-        return Redirect::route('surat-masuk.index')->with('success', 'Surat masuk '. $suratMasuk->nomor_surat . ' berhasil dihapus.');
+        return Redirect::route('surat-masuk.index');
     }
 }

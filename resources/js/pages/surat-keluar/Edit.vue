@@ -12,39 +12,39 @@ import DatePicker from 'primevue/datepicker';
 import Chips from 'primevue/chips';
 import FileUpload from 'primevue/fileupload';
 import { useToast } from "primevue/usetoast";
-// Impor Ikon
+
+// Impor Ikon (disamakan persis dengan file patokan Anda)
 import { Save, X, Trash2, FileImage, FileType2, FileBadge, UploadCloud } from 'lucide-vue-next';
 
 const props = defineProps({
-    surat: Object, // Menerima data surat dari controller
+    surat: Object,
 });
 
 const toast = useToast();
 
 const breadcrumbs = [
     { label: 'Dashboard', route: route('dashboard') },
-    { label: 'Surat Masuk', route: route('surat-masuk.index') },
+    { label: 'Surat Keluar', route: route('surat-keluar.index') }, // Diubah
     { label: 'Edit Surat' }
 ];
 
-const fileUploadRef = ref(null); // Referensi untuk file baru
-const existingFiles = ref(props.surat.files || []); // Daftar file yang sudah ada
+const fileUploadRef = ref(null);
+const existingFiles = ref(props.surat.files || []);
 const isUploading = ref(false);
 
-// Inisialisasi form dengan data yang ada
+// Inisialisasi form disesuaikan untuk Surat Keluar
 const form = useForm({
-    _method: 'PUT', // Penting untuk update dengan file
+    _method: 'PUT',
     nomor_surat: props.surat.nomor_surat,
     tanggal_surat: new Date(props.surat.tanggal_surat),
-    tanggal_diterima: new Date(props.surat.tanggal_diterima),
-    penerima: props.surat.penerima,
-    pengirim: props.surat.pengirim,
+    tujuan: props.surat.tujuan, // 'pengirim' diubah menjadi 'tujuan'
     perihal: props.surat.perihal,
+    tembusan: props.surat.tembusan, // Kolom baru
     lampiran: [], // Akan diisi dengan ID file final
     tags: props.surat.tags ? props.surat.tags.map(tag => tag.name.en) : [],
 });
 
-// Fungsi untuk mengunggah file baru yang dipilih
+// Fungsi untuk mengunggah file baru (SAMA PERSIS DENGAN FILE PATOKAN ANDA)
 const uploadNewFiles = async () => {
     if (!fileUploadRef.value || !fileUploadRef.value.files || fileUploadRef.value.files.length === 0) {
         return [];
@@ -53,7 +53,7 @@ const uploadNewFiles = async () => {
     const uploadPromises = fileUploadRef.value.files.map(file => {
         const formData = new FormData();
         formData.append('file', file);
-        return axios.post(route('files.store'), formData);
+        return axios.post(route('files.store'), formData); // Menggunakan files.store
     });
     try {
         const responses = await Promise.all(uploadPromises);
@@ -67,7 +67,7 @@ const uploadNewFiles = async () => {
     }
 };
 
-// Fungsi untuk menghapus file yang sudah ada
+// Fungsi untuk menghapus file yang sudah ada (SAMA PERSIS DENGAN FILE PATOKAN ANDA)
 const removeExistingFile = async (fileToRemove) => {
     try {
         await axios.delete(route('files.destroy', fileToRemove.id));
@@ -79,20 +79,16 @@ const removeExistingFile = async (fileToRemove) => {
 };
 
 
-// Fungsi submit utama
+// Fungsi submit utama (SAMA PERSIS DENGAN FILE PATOKAN ANDA)
 const submit = async () => {
     try {
-        // 1. Upload file baru
         const newFileIds = await uploadNewFiles();
-        
-        // 2. Gabungkan ID file yang ada dengan ID file yang baru diunggah
         const existingFileIds = existingFiles.value.map(file => file.id);
         form.lampiran = [...existingFileIds, ...newFileIds];
 
-        // 3. Kirim form utama menggunakan method POST (karena ada file)
-        form.post(route('surat-masuk.update', props.surat.id), {
+        form.post(route('surat-keluar.update', props.surat.id), { // Route diubah
             onSuccess: () => {
-                toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Data surat masuk telah diperbarui', life: 3000 });
+                toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Data surat keluar telah diperbarui', life: 3000 }); // Pesan diubah
             },
         });
     } catch (error) {
@@ -116,9 +112,9 @@ const submit = async () => {
                         <template #content>
                             <div class="flex flex-col gap-6">
                                 <div>
-                                    <label for="pengirim" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Pengirim <span class="text-red-500">*</span></label>
-                                    <InputText id="pengirim" v-model="form.pengirim" class="w-full" :invalid="!!form.errors.pengirim" />
-                                    <small class="p-error">{{ form.errors.pengirim }}</small>
+                                    <label for="tujuan" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Tujuan <span class="text-red-500">*</span></label>
+                                    <InputText id="tujuan" v-model="form.tujuan" class="w-full" :invalid="!!form.errors.tujuan" />
+                                    <small class="p-error">{{ form.errors.tujuan }}</small>
                                 </div>
                                 <div>
                                     <label for="nomor_surat" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Nomor Surat <span class="text-red-500">*</span></label>
@@ -134,6 +130,11 @@ const submit = async () => {
                                     <label for="perihal" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Perihal / Subjek Surat <span class="text-red-500">*</span></label>
                                     <Textarea id="perihal" v-model="form.perihal" rows="4" class="w-full" :invalid="!!form.errors.perihal" />
                                     <small class="p-error">{{ form.errors.perihal }}</small>
+                                </div>
+                                <div>
+                                    <label for="tembusan" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Tembusan</label>
+                                    <Textarea id="tembusan" v-model="form.tembusan" rows="3" class="w-full" :invalid="!!form.errors.tembusan" />
+                                    <small class="p-error">{{ form.errors.tembusan }}</small>
                                 </div>
                                 <div>
                                     <div class="mb-4">
@@ -161,16 +162,13 @@ const submit = async () => {
 
                                         <div v-if="existingFiles.length > 0" class="mt-6">
                                             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                                                
                                                 <div v-for="file in existingFiles" :key="file.id" class="relative group rounded-lg shadow-sm overflow-hidden transition-shadow hover:shadow-lg">
-                                                    
                                                     <a :href="file.url" target="_blank" class="block w-full aspect-square flex items-center justify-center bg-slate-100 dark:bg-slate-700">
                                                         <img v-if="file.mime_type.includes('image')" :src="file.preview_url" :alt="file.original_name" class="w-full h-full object-cover">
                                                         <FileImage v-else-if="file.mime_type.includes('pdf')" class="text-red-500 w-36 h-36"/>
                                                         <FileType2 v-else-if="file.mime_type.includes('zip')" class="text-yellow-500 w-36 h-36"/>
                                                         <FileBadge v-else  class="text-blue-500 w-36 h-36"/>
                                                     </a>
-
                                                     <div class="p-3 bg-white dark:bg-slate-800">
                                                         <p class="font-medium text-sm text-slate-800 dark:text-slate-200 truncate" :title="file.original_name">
                                                             {{ file.original_name }}
@@ -179,7 +177,6 @@ const submit = async () => {
                                                             {{ (file.size / 1024).toFixed(2) }} KB
                                                         </p>
                                                     </div>
-
                                                     <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                                         <Button class="p-button-rounded p-button-danger" @click="removeExistingFile(file)" v-tooltip.top="'Hapus File'">
                                                             <Trash2 class="w-4 h-4" />
@@ -203,16 +200,6 @@ const submit = async () => {
                         <template #content>
                             <div class="flex flex-col gap-6">
                                 <div>
-                                    <label for="tanggal_diterima" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Tanggal Diterima <span class="text-red-500">*</span></label>
-                                    <DatePicker id="tanggal_diterima" v-model="form.tanggal_diterima" class="w-full" inputClass="w-full" dateFormat="dd/mm/yy" :invalid="!!form.errors.tanggal_diterima" />
-                                    <small class="p-error">{{ form.errors.tanggal_diterima }}</small>
-                                </div>
-                                 <div>
-                                    <label for="penerima" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Penerima Internal <span class="text-red-500">*</span></label>
-                                    <InputText id="penerima" v-model="form.penerima" class="w-full" :invalid="!!form.errors.penerima" />
-                                    <small class="p-error">{{ form.errors.penerima }}</small>
-                                </div>
-                                <div>
                                     <label for="tags" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Tags / Label</label>
                                     <Chips id="tags" v-model="form.tags" class="w-full" separator="," />
                                 </div>
@@ -220,11 +207,9 @@ const submit = async () => {
                         </template>
                         <template #footer>
                             <div class="flex flex-row gap-3 pt-4">
-                                <Button type="submit" label="Simpan" :loading="form.processing">
-                                    <template #icon><Save class="w-4 h-4 mr-2" /></template>
+                                <Button type="submit" label="Simpan" :loading="form.processing || isUploading"> <template #icon><Save class="w-4 h-4 mr-2" /></template>
                                 </Button>
-                                <Link :href="route('surat-masuk.index')">
-                                    <Button label="Batal" severity="secondary" outlined class="w-full">
+                                <Link :href="route('surat-keluar.index')"> <Button label="Batal" severity="secondary" outlined class="w-full">
                                         <template #icon><X class="w-4 h-4 mr-2" /></template>
                                     </Button>
                                 </Link>

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surat_masuks', function (Blueprint $table) {
+        Schema::create('surat_keluars', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('tanggal_surat');
-            $table->dateTime('tanggal_diterima');
             $table->string('nomor_surat');
-            $table->string('pengirim');
+            $table->dateTime('tanggal_surat');
+            $table->string('tujuan');
             $table->text('perihal');
-            $table->string('penerima');
+            $table->text('tembusan');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('surat_masuks');
+        Schema::dropIfExists('surat_keluars');
     }
 };

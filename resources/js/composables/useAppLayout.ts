@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
-import { LayoutGrid, Inbox, Info, Settings, LogOut, FileSearch, Users} from 'lucide-vue-next';
+import { LayoutGrid, Inbox, Info, Settings, LogOut, FileSearch, Users, Send, Compass} from 'lucide-vue-next';
 import { MenuItem } from '@/types';
 
 export function useAppLayout() {
@@ -28,23 +28,35 @@ export function useAppLayout() {
             active: currentRoute.value == 'users',
         },
         {
+            label: 'Surat Keluar',
+            lucideIcon: Send,
+            route: route('surat-keluar.index'),
+            active: currentRoute.value == 'surat-keluar',
+        },
+        {
+            label: 'Surat Tugas',
+            lucideIcon: Compass,
+            route: route('surat-tugas.index'),
+            active: currentRoute.value == 'surat-tugas',
+        },
+        {
             label: 'Pengguna',
             lucideIcon: Users,
             route: route('users.index'),
             active: currentRoute.value == 'users',
         },
-        {
-            label: '#',
-            lucideIcon: Info,
-            items: [
-                {
-                    label: 'Starter Kit Docs',
-                    url: 'https://connorabbas.github.io/laravel-primevue-starter-kit-docs/',
-                    target: '_blank',
-                    lucideIcon: FileSearch,
-                },
-            ],
-        },
+        // {
+        //     label: '#',
+        //     lucideIcon: Info,
+        //     items: [
+        //         {
+        //             label: 'Starter Kit Docs',
+        //             url: 'https://connorabbas.github.io/laravel-primevue-starter-kit-docs/',
+        //             target: '_blank',
+        //             lucideIcon: FileSearch,
+        //         },
+        //     ],
+        // },
     ]);
 
     // User menu and logout functionality.

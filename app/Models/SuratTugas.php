@@ -6,28 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Tags\HasTags;
 
-class SuratMasuk extends Model
+class SuratTugas extends Model
 {
     use HasTags;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    
     protected $fillable = [
-        'penerima',
-        'pengirim',
-        'tanggal_diterima',
-        'tanggal_surat',
         'nomor_surat',
+        'tanggal_surat',
+        'tujuan',
         'perihal',
     ];
-
+    
     protected function casts(): array
     {
         return [
-            'tanggal_terima' => 'datetime',
             'tanggal_surat' => 'datetime',
         ];
     }
