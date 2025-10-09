@@ -13,6 +13,7 @@ const props = defineProps({
     stats: Object,
     latestSuratMasuk: Object,
     latestSuratKeluar: Object,
+    latestSuratTugas: Object,
 });
 
 const breadcrumbs = [{ label: 'Dashboard' }];
@@ -29,7 +30,7 @@ const formatDate = (value) => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <InertiaHead title="Dashboard" />
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Card>
                 <template #content>
                     <div class="flex justify-between items-center">
@@ -50,6 +51,21 @@ const formatDate = (value) => {
                         <div>
                             <p class="text-sm font-medium text-muted-color">Surat Keluar</p>
                             <p class="text-2xl font-bold">{{ stats.total_surat_keluar }}</p>
+                        </div>
+                        <div class="p-3 bg-orange-100 rounded-full">
+                            <Send class="w-6 h-6 text-orange-600" />
+                        </div>
+                    </div>
+                </template>
+            </Card>
+            
+
+            <Card>
+                <template #content>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm font-medium text-muted-color">Surat Tugas</p>
+                            <p class="text-2xl font-bold">{{ stats.total_surat_tugas }}</p>
                         </div>
                         <div class="p-3 bg-orange-100 rounded-full">
                             <Send class="w-6 h-6 text-orange-600" />
@@ -80,7 +96,7 @@ const formatDate = (value) => {
                     <DataTable :value="latestSuratMasuk" stripedRows tableStyle="min-width: 20rem">
                         <template #empty>Belum ada surat masuk.</template>
                         <Column field="pengirim" header="Pengirim"></Column>
-                        <Column field="perihal" header="Perihal"></Column>
+                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
                         <Column field="tanggal_diterima" header="Tanggal">
                             <template #body="{ data }">
                                 {{ formatDate(data.tanggal_diterima) }}
@@ -96,7 +112,23 @@ const formatDate = (value) => {
                     <DataTable :value="latestSuratKeluar" stripedRows tableStyle="min-width: 20rem">
                         <template #empty>Belum ada surat keluar.</template>
                         <Column field="tujuan" header="Tujuan"></Column>
-                        <Column field="perihal" header="Perihal"></Column>
+                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
+                        <Column field="tanggal_surat" header="Tanggal">
+                            <template #body="{ data }">
+                                {{ formatDate(data.tanggal_surat) }}
+                            </template>
+                        </Column>
+                    </DataTable>
+                </template>
+            </Card>
+
+            <Card>
+                <template #content>
+                    <h3 class="text-lg font-semibold mb-4">Surat Tugas Terbaru</h3>
+                    <DataTable :value="latestSuratTugas" stripedRows tableStyle="min-width: 20rem">
+                        <template #empty>Belum ada surat tugas.</template>
+                        <Column field="tujuan" header="Tujuan"></Column>
+                        <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
                         <Column field="tanggal_surat" header="Tanggal">
                             <template #body="{ data }">
                                 {{ formatDate(data.tanggal_surat) }}
