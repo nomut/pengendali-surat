@@ -12,6 +12,7 @@ export interface User {
 }
 
 export interface AuthProps {
+    permissions: any;
     user: User | null;
 }
 

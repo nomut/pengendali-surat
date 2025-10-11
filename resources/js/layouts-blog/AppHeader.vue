@@ -96,9 +96,9 @@ const menuItems = ref([
                             <InertiaLink :href="route('login')" class="block mb-3" @click="toggleMobileMenu">
                                 <Button label="Login" class="w-full futuristic-button-light" />
                             </InertiaLink>
-                            <InertiaLink :href="route('register')" @click="toggleMobileMenu">
+                            <!-- <InertiaLink :href="route('register')" @click="toggleMobileMenu">
                                 <Button label="Register" outlined class="w-full !border-sky-500 !text-sky-500" />
-                            </InertiaLink>
+                            </InertiaLink> -->
                         </template>
                     </div>
                 </template>
@@ -139,9 +139,9 @@ const menuItems = ref([
                     <InertiaLink :href="route('login')">
                         <Button label="Login" text class="text-slate-700 hover:bg-black/5" />
                     </InertiaLink>
-                    <InertiaLink :href="route('register')">
+                    <!-- <InertiaLink :href="route('register')">
                         <Button label="Register" outlined class="!border-sky-500 !text-sky-500 hover:!bg-sky-500/10" />
-                    </InertiaLink>
+                    </InertiaLink> -->
                 </template>
             </div>
             <div class="md:hidden">

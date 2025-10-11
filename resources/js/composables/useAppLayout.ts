@@ -12,7 +12,7 @@ export function useAppLayout() {
         /* eslint-enable @typescript-eslint/no-unused-vars */
         return route().current();
     });
-
+    
     // Menu items
     const menuItems = computed<MenuItem[]>(() => [
         {
@@ -26,24 +26,28 @@ export function useAppLayout() {
             lucideIcon: Inbox,
             route: route('surat-masuk.index'),
             active: currentRoute.value == 'users',
+            visible: page.props.auth.permissions.includes('surat-masuk-index'),
         },
         {
             label: 'Surat Keluar',
             lucideIcon: Send,
             route: route('surat-keluar.index'),
             active: currentRoute.value == 'surat-keluar',
+            visible: page.props.auth.permissions.includes('surat-keluar-index'),
         },
         {
             label: 'Surat Tugas',
             lucideIcon: Compass,
             route: route('surat-tugas.index'),
             active: currentRoute.value == 'surat-tugas',
+            visible: page.props.auth.permissions.includes('surat-tugas-index'),
         },
         {
             label: 'Pengguna',
             lucideIcon: Users,
             route: route('users.index'),
             active: currentRoute.value == 'users',
+            visible: page.props.auth.permissions.includes('user-index'),
         },
         // {
         //     label: '#',

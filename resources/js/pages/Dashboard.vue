@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
-import { Users, Mail, Send, Eye } from 'lucide-vue-next';
+import { Users, Mail, Send, Eye, Compass } from 'lucide-vue-next';
 
 // Impor komponen PrimeVue
 import Card from 'primevue/card';
@@ -67,8 +67,8 @@ const formatDate = (value) => {
                             <p class="text-sm font-medium text-muted-color">Surat Tugas</p>
                             <p class="text-2xl font-bold">{{ stats.total_surat_tugas }}</p>
                         </div>
-                        <div class="p-3 bg-orange-100 rounded-full">
-                            <Send class="w-6 h-6 text-orange-600" />
+                        <div class="p-3 bg-slate-100 rounded-full">
+                            <Compass class="w-6 h-6 text-slate-600" />
                         </div>
                     </div>
                 </template>

@@ -19,6 +19,7 @@ import { useToast } from "primevue/usetoast";
 const props = defineProps({
     suratKeluar: Object, // Prop diganti
     filters: Object,
+    auth: Object,
 });
 
 const confirm = useConfirm();
@@ -92,7 +93,7 @@ const deleteSurat = (surat) => {
                     <template #header>
                         <div class="flex justify-between items-center">
                             <h3 class="m-0 text-lg font-semibold">Daftar Surat Keluar</h3>
-                             <Link :href="route('surat-keluar.create')">
+                             <Link :href="route('surat-keluar.create')" v-if="props.auth.permissions.includes('surat-keluar-create')">
                                 <Button label="Tambah Surat" severity="success" icon="pi pi-plus" />
                             </Link>
                         </div>
@@ -129,9 +130,9 @@ const deleteSurat = (surat) => {
                     <Column header="Aksi" :exportable="false">
                          <template #body="{ data }">
                             <div class="flex space-x-2">
-                                <Button class="p-button-rounded p-button-secondary" @click="router.visit(route('surat-keluar.show', data.id))" v-tooltip.top="'Lihat Detail'"><Eye class="w-4 h-4" /></Button>
-                                <Button class="p-button-rounded p-button-info" @click="editSurat(data)" v-tooltip.top="'Edit Surat'"><Pencil class="w-4 h-4" /></Button>
-                                <Button class="p-button-rounded p-button-danger" @click="deleteSurat(data)" v-tooltip.top="'Hapus Surat'"><Trash2 class="w-4 h-4" /></Button>
+                                <Button v-if="props.auth.permissions.includes('surat-keluar-index')" class="p-button-rounded p-button-secondary" @click="router.visit(route('surat-keluar.show', data.id))" v-tooltip.top="'Lihat Detail'"><Eye class="w-4 h-4" /></Button>
+                                <Button v-if="props.auth.permissions.includes('surat-keluar-edit')" class="p-button-rounded p-button-info" @click="editSurat(data)" v-tooltip.top="'Edit Surat'"><Pencil class="w-4 h-4" /></Button>
+                                <Button v-if="props.auth.permissions.includes('surat-keluar-delete')" class="p-button-rounded p-button-danger" @click="deleteSurat(data)" v-tooltip.top="'Hapus Surat'"><Trash2 class="w-4 h-4" /></Button>
                             </div>
                          </template>
                     </Column>

@@ -7,11 +7,10 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
 import Toolbar from 'primevue/toolbar';
 import Tag from 'primevue/tag';
 // Impor ikon dari Lucide
-import { Plus, Pencil, Trash2 } from 'lucide-vue-next';
+import { Plus, Pencil, Trash2, ShieldUser } from 'lucide-vue-next';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
@@ -47,10 +46,9 @@ const deleteUser = (user) => {
         accept: () => {
             router.delete(route('users.destroy', user));
 
-            toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Pengguna dihapus (simulasi)', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Pengguna dihapus', life: 3000 });
         },
     });
-    console.log(confirmation);
 };
 
 const formatDate = (value) => {
@@ -69,22 +67,22 @@ const getRoleSeverity = (role) => (role === 'Administrator' ? 'danger' : 'info')
         <Card>
             <template #content>
                 <Toolbar class="mb-4">
-                    <!-- 
-                    <template #start>
-                        <Link :href="route('users.create')">
+                    
+                    <template #end>
+                        <Link :href="route('users.create')" class="mr-2">
                             <Button label="Tambah Pengguna" severity="success">
                                 <template #icon>
                                     <Plus class="w-4 h-4 mr-2" />
                                 </template>
                             </Button>
                         </Link>
-                    </template> 
-                    -->
-                    <template #end>
-                        <span class="relative">
-                            <i class="pi pi-search absolute top-2/4 -mt-2 left-3" />
-                            <InputText v-model="filters.global.value" placeholder="Cari..." class="pl-10" />
-                        </span>
+                        <Link :href="route('users.roles.index')">
+                            <Button label="Peran" severity="primary">
+                                <template #icon>
+                                    <ShieldUser class="w-4 h-4 mr-2" />
+                                </template>
+                            </Button>
+                        </Link>
                     </template>
                 </Toolbar>
 
@@ -101,28 +99,26 @@ const getRoleSeverity = (role) => (role === 'Administrator' ? 'danger' : 'info')
 
                     <Column field="name" header="Nama" sortable />
                     <Column field="email" header="Email" sortable />
-                    <Column field="role" header="Role" sortable>
+                    <Column field="role" header="Peran" sortable>
                         <template #body="{ data }">
                             <Tag :value="data.role_name" :severity="getRoleSeverity(data.role_name)" />
                         </template>
                     </Column>
-                    <Column field="created_at" header="Bergabung" sortable>
+                    <Column field="created_at" header="Dibuat" sortable>
                         <template #body="{ data }">
                             {{ formatDate(data.created_at) }}
                         </template>
                     </Column>
                     <Column header="Aksi" style="width: 10rem">
                         <template #body="{ data }">
-                            <div class="flex space-x-2">
-                                <template v-if="data.id != user.id">
-                                    <Button class="p-button-rounded p-button-info" @click="editUser(data)">
-                                        <Pencil class="w-4 h-4" />
-                                    </Button>
+                            <div class="flex space-x-2" v-if="user.id !== 1 || data.id != user.id">
+                                <Button class="p-button-rounded p-button-info" @click="editUser(data)">
+                                    <Pencil class="w-4 h-4" />
+                                </Button>
 
-                                    <Button class="p-button-rounded p-button-danger" @click="deleteUser(data)">
-                                        <Trash2 class="w-4 h-4" />
-                                    </Button>
-                                </template>
+                                <Button class="p-button-rounded p-button-danger" @click="deleteUser(data)">
+                                    <Trash2 class="w-4 h-4" />
+                                </Button>
                             </div>
                         </template>
                     </Column>

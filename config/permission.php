@@ -201,9 +201,29 @@ return [
     ],
 
     'abilities' => [
-        'User', 
-        'User Create',
-        'User Update', 
-        'User Delete',
+        'surat-masuk-index' => 'Surat Masuk', 
+        'surat-masuk-create' => 'Surat Masuk Create',
+        'surat-masuk-update' => 'Surat Masuk Update', 
+        'surat-masuk-delete' => 'Surat Masuk Delete',
+
+        'surat-keluar-index' => 'Surat Keluar',
+        'surat-keluar-create' => 'Surat Keluar Create',
+        'surat-keluar-update' => 'Surat Keluar Update', 
+        'surat-keluar-delete' => 'Surat Keluar Delete',
+
+        'surat-tugas-index' => 'Surat Tugas',
+        'surat-tugas-create' => 'Surat Tugas Create',
+        'surat-tugas-update' => 'Surat Tugas Update', 
+        'surat-tugas-delete' => 'Surat Tugas Delete',
+
+        'user-index' => 'User',
+        'user-create' => 'User Create',
+        'user-update' => 'User Update', 
+        'user-delete' => 'User Delete',
+
+        'user-role-index' => 'User Role',
+        'user-role-create' => 'User Role Create',
+        'user-role-update' => 'User Role Update', 
+        'user-role-delete' => 'User Role Delete',
     ]
 ];

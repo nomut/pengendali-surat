@@ -1,18 +1,17 @@
 <script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 // Impor komponen PrimeVue
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
-import Select from 'primevue/select';
-import Message from 'primevue/message';
+import Dropdown from 'primevue/dropdown';
 import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
-    user: Object, // Menerima data user yang akan diedit
-    roles: Object, // Menerima data user yang akan diedit
+    roles: Object, // Menerima data role
 });
 
 const toast = useToast();
@@ -20,21 +19,22 @@ const toast = useToast();
 const breadcrumbs = [
     { label: 'Dashboard', route: route('dashboard') },
     { label: 'Users', route: route('users.index') },
-    { label: 'Edit' }
+    { label: 'Tambah Baru' }
 ];
 
-// Menggunakan useForm dan mengisinya dengan data dari props
+// Menggunakan useForm untuk state management & validasi
 const form = useForm({
-    name: props.user.name,
-    email: props.user.email,
-    role_id: props.user.role_id,
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    role_id: null, // Nilai default
 });
 
 const submit = () => {
-    // Menggunakan method PUT untuk update
-    form.put(route('users.update', props.user.id), {
+    form.post(route('users.store'), {
         onSuccess: () => {
-            toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Data pengguna telah diperbarui', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Berhasil', detail: 'Pengguna baru telah ditambahkan', life: 3000 });
         },
         onError: () => {
             toast.add({ severity: 'error', summary: 'Gagal', detail: 'Silakan periksa kembali isian form Anda', life: 3000 });
@@ -45,13 +45,13 @@ const submit = () => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <InertiaHead :title="`Edit User: ${user.name}`" />
+        <InertiaHead title="Tambah Pengguna" />
 
         <div class="max-w-2xl mx-auto">
             <Card>
                 <template #title>
-                    <h3 class="text-lg font-semibold">Form Edit Pengguna</h3>
-                    <p class="text-sm text-muted-color mt-1">Perbarui detail untuk akun <span class="font-medium">{{ user.name }}</span>.</p>
+                    <h3 class="text-lg font-semibold">Tambah Pengguna</h3>
+                    <p class="text-sm text-muted-color mt-1">Isi detail di bawah ini untuk membuat akun pengguna baru.</p>
                 </template>
                 <template #content>
                     <form @submit.prevent="submit">
@@ -73,13 +73,24 @@ const submit = () => {
                                 <Select id="role" v-model="form.role_id" :options="roles" optionLabel="name" optionValue="id" placeholder="Pilih Peran" class="w-full" :class="{ 'p-invalid': form.errors.role }" />
                                 <small v-if="form.errors.role" class="p-error">{{ form.errors.role }}</small>
                             </div>
+
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
+                                <Password id="password" v-model="form.password" class="w-full" :feedback="false" toggleMask :class="{ 'p-invalid': form.errors.password }" fluid/>
+                                <small v-if="form.errors.password" class="p-error">{{ form.errors.password }}</small>
+                            </div>
+
+                            <div>
+                                <label for="password_confirmation" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Konfirmasi Password</label>
+                                <Password id="password_confirmation" v-model="form.password_confirmation" class="w-full" :feedback="false" toggleMask  fluid/>
+                            </div>
                         </div>
 
                         <div class="flex justify-end space-x-2 mt-8">
                             <Link :href="route('users.index')">
                                 <Button label="Batal" severity="secondary" outlined />
                             </Link>
-                            <Button type="submit" label="Simpan Perubahan" :loading="form.processing" />
+                            <Button type="submit" label="Simpan" :loading="form.processing" />
                         </div>
                     </form>
                 </template>

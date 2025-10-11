@@ -59,7 +59,7 @@ return Application::configure(basePath: dirname(__DIR__))
                         'errorTitles' => $errorTitles,
                         'errorDetails' => $errorDetails,
                         'status' => $statusCode,
-                        'homepageRoute' => route('welcome'),
+                        'homepageRoute' => route('dashboard'),
                         'ziggy' => fn () => [
                             ...(new Ziggy())->toArray(),
                             'location' => $request->url(),

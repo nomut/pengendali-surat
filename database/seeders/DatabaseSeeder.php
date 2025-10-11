@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->createPermissions($abilities);
 
-        $role = Role::create(['name' => 'administrator']);
+        $role = Role::create(['name' => 'Administrator']);
         $role->syncPermissions($abilities);
 
         $user = User::factory()->create([

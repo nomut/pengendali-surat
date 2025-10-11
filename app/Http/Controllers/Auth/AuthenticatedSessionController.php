@@ -33,6 +33,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+        if ($user->roles->isEmpty()) {
+            Auth::logout();
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Akun Anda belum memiliki role. Hubungi admin.',
+            ]);
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

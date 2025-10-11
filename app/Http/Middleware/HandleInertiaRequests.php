@@ -36,7 +36,15 @@ class HandleInertiaRequests extends Middleware
      * @return array<string, mixed>
      */
     public function share(Request $request): array
-    {
+    {   
+        $auth = [
+            'user' => $request->user(),
+        ];
+        if ($request->user()) {
+            $auth['permissions'] = $request->user()->getAllPermissions()->pluck('name');
+        } else {
+            $auth['permissions'] = [];
+        }
         return [
             ...parent::share($request),
             'colorScheme' => fn () => $request->cookie('colorScheme', 'auto'),
@@ -44,9 +52,7 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy())->toArray(),
                 'location' => $request->url(),
             ],
-            'auth' => [
-                'user' => $request->user(),
-            ],
+            'auth' => $auth,
             'flash' => [
                 'success' => fn () => $request->session()->get('flash_success'),
                 'info' => fn () => $request->session()->get('flash_info'),

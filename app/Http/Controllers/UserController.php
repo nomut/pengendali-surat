@@ -30,14 +30,35 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        // Arahkan ke halaman pembuatan user (buat file Vue-nya nanti)
-        // return Inertia::render('Admin/Users/Create');
-        return redirect()->back()->with('info', 'Create user page has not been built yet.');
+        // Method ini akan merender halaman Vue yang baru kita buat
+        return Inertia::render('users/Create', [
+            'roles' => Role::select('id', 'name')->orderBy('name', 'asc')->get()
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role_id' => 'required|exists:roles,id', // Sesuaikan dengan roles Anda
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+        
+        $user->assignRole([$request->role_id]);
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -53,7 +74,7 @@ class UserController extends Controller
                 'role_name' => $user->role_name,
                 'role_id' => $user->role_id,
             ],
-            'roles' => Role::select('id', 'name')->get()
+            'roles' => Role::select('id', 'name')->orderBy('name', 'asc')->get()
         ]);
     }
 
@@ -72,9 +93,8 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            $request->role_id,
         ]);
-        $user->assignRole([$request->role_id]);
+        $user->syncRoles([$request->role_id]);
 
         // Hanya update password jika diisi
         if ($request->filled('password')) {
@@ -85,4 +105,20 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
+    public function destroy(User $user)
+    {
+        if (auth()->id() === $user->id) {
+            return redirect()->back()->with('error', 'Tidak dapat menghapus akun sendiri.');
+        }
+
+        if($user->id === 1) {
+            return redirect()->back()->with('error', 'Tidak dapat menghapus pengguna ini.');
+        }
+
+        $user->delete();
+
+        return redirect()->route('users.index');
+    }
+    
 }
