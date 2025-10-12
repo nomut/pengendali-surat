@@ -69,7 +69,7 @@ const onPage = (event) => {
     });
 
     // 4. Lakukan request ke server dengan semua parameter gabungan
-    router.get(route('surat-keluar.index'), queryParams, {
+    router.get(route('surat-tugas.index'), queryParams, {
         preserveState: true,
         replace: true, // Gunakan replace agar tidak menumpuk riwayat browser
     });
@@ -86,7 +86,7 @@ const onSort = (event) => {
         if (!queryParams[key]) delete queryParams[key];
     });
 
-    router.get(route('surat-keluar.index'), queryParams, {
+    router.get(route('surat-tugas.index'), queryParams, {
         preserveState: true,
         replace: true,
     });
