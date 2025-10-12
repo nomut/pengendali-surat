@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meeting;
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
 use App\Models\SuratTugas;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,26 +15,31 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $totalUsers = User::count();
-        $totalSuratMasuk = SuratMasuk::count();
-        $totalSuratKeluar = SuratKeluar::count();
-        $totalSuratTugas = SuratTugas::count();
+        
 
-        $latestSuratMasuk = SuratMasuk::latest()->take(5)->get();
-        $latestSuratKeluar = SuratKeluar::latest()->take(5)->get();
-        $latestSuratTugas = SuratTugas::latest()->take(5)->get();
+        $now = Carbon::now();
+        $upcomingMeetings = Meeting::where('starts_at', '>=', $now)->orderBy('starts_at', 'asc')->take(5)->get();
+        $pastMeetings = Meeting::where('starts_at', '<', $now)->orderBy('starts_at', 'desc')->take(5)->get();
+
+        // Data untuk tabel Surat
+        $latestSuratMasuk = SuratMasuk::latest('tanggal_diterima')->take(5)->get();
+        $latestSuratKeluar = SuratKeluar::latest('tanggal_surat')->take(5)->get();
+        $latestSuratTugas = SuratTugas::latest('tanggal_surat')->take(5)->get();
 
 
-        // --- DATA DUMMY (untuk sementara, jika model belum ada) ---
+
         $stats = [
-            'total_users' => $totalUsers,
-            'total_surat_masuk' => $totalSuratMasuk,
-            'total_surat_keluar' => $totalSuratKeluar,
-            'total_surat_tugas' => $totalSuratTugas,
+            'total_meetings' => Meeting::count(),
+            'total_surat_masuk' => SuratMasuk::count(),
+            'total_surat_keluar' => SuratKeluar::count(),
+            'total_surat_tugas' => SuratTugas::count(),
+            'total_users' => User::count(),
         ];
 
         return Inertia::render('Dashboard', [
             'stats' => $stats,
+            'upcomingMeetings' => $upcomingMeetings,
+            'pastMeetings' => $pastMeetings,
             'latestSuratMasuk' => $latestSuratMasuk,
             'latestSuratKeluar' => $latestSuratKeluar,
             'latestSuratTugas' => $latestSuratTugas,

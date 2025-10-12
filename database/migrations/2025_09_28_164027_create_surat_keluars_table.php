@@ -17,7 +17,7 @@ return new class extends Migration
             $table->dateTime('tanggal_surat');
             $table->string('tujuan');
             $table->text('perihal');
-            $table->text('tembusan');
+            $table->text('tembusan')->nullable();
             $table->timestamps();
         });
     }
