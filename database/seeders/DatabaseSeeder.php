@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $abilities = config('permission.abilities');
+        $abilities = array_keys(config('permission.abilities'));
 
         $this->createPermissions($abilities);
 

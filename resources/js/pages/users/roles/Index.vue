@@ -65,17 +65,6 @@ const deleteRole = (role) => {
 
         <Card>
             <template #content>
-                <Toolbar class="mb-4">
-                    <template #end>
-                        <Link :href="route('users.roles.create')">
-                            <Button label="Tambah Peran" severity="success">
-                                <template #icon>
-                                    <Plus class="w-4 h-4 mr-2" />
-                                </template>
-                            </Button>
-                        </Link>
-                    </template>
-                </Toolbar>
 
                 <DataTable 
                     :value="roles.data" 
@@ -85,7 +74,17 @@ const deleteRole = (role) => {
                     tableStyle="min-width: 40rem"
                 >
                     <template #header>
-                        <h3 class="m-0 text-lg font-semibold">Daftar Peran</h3>
+                        <div class="flex justify-between items-center">
+                            <h3 class="m-0 text-lg font-semibold">Daftar Peran</h3>
+                            
+                            <Link :href="route('users.roles.create')">
+                                <Button label="Tambah Peran" severity="success">
+                                    <template #icon>
+                                        <Plus class="w-4 h-4 mr-2" />
+                                    </template>
+                                </Button>
+                            </Link>
+                        </div>
                     </template>
                     <template #empty> Belum ada data Peran. </template>
 

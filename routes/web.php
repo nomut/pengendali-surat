@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SuratMasukController;
@@ -63,6 +65,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('surat-tugas/{surat_tugas}/edit', [SuratTugasController::class, 'edit'])->name('surat-tugas.edit')->middleware('can:surat-tugas-update');
     Route::put('surat-tugas/{surat_tugas}', [SuratTugasController::class, 'update'])->name('surat-tugas.update')->middleware('can:surat-tugas-update');
     Route::delete('surat-tugas/{surat_tugas}', [SuratTugasController::class, 'destroy'])->name('surat-tugas.destroy')->middleware('can:surat-tugas-delete');
+
+    // Meetings
+    Route::get('meetings', [MeetingController::class, 'index'])->name('meetings.index')->middleware('can:rapat-index');
+    Route::get('meetings/create', [MeetingController::class, 'create'])->name('meetings.create')->middleware('can:rapat-create');
+    Route::post('meetings', [MeetingController::class, 'store'])->name('meetings.store')->middleware('can:rapat-create');
+    Route::get('meetings/{meeting}', [MeetingController::class, 'show'])->name('meetings.show')->middleware('can:rapat-index');
+    Route::get('meetings/{meeting}/edit', [MeetingController::class, 'edit'])->name('meetings.edit')->middleware('can:rapat-update');
+    Route::put('meetings/{meeting}', [MeetingController::class, 'update'])->name('meetings.update')->middleware('can:rapat-update');
+    Route::delete('meetings/{meeting}', [MeetingController::class, 'destroy'])->name('meetings.destroy')->middleware('can:rapat-delete');
+
+    // Persons
+    Route::get('persons', [PersonController::class, 'index'])->name('persons.index')->middleware('can:peserta-rapat-index');
+    Route::post('persons', [PersonController::class, 'store'])->name('persons.store')->middleware('can:peserta-rapat-create');
+    Route::get('persons/{person}/edit', [PersonController::class, 'edit'])->name('persons.edit')->middleware('can:peserta-rapat-update');
+    Route::put('persons/{person}', [PersonController::class, 'update'])->name('persons.update')->middleware('can:peserta-rapat-update');
+    Route::delete('persons/{person}', [PersonController::class, 'destroy'])->name('persons.destroy')->middleware('can:peserta-rapat-delete');
+  
 
     // File Management
     Route::post('/files', [FileController::class, 'store'])->name('files.store');

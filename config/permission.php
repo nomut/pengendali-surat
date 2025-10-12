@@ -216,6 +216,16 @@ return [
         'surat-tugas-update' => 'Surat Tugas Update', 
         'surat-tugas-delete' => 'Surat Tugas Delete',
 
+        'rapat-index' => 'Rapat',
+        'rapat-create' => 'Rapat Create',
+        'rapat-update' => 'Rapat Update', 
+        'rapat-delete' => 'Rapat Delete',
+
+        'peserta-rapat-index' => 'Peserta Rapat',
+        'peserta-rapat-create' => 'Peserta Rapat Create',
+        'peserta-rapat-update' => 'Peserta Rapat Update', 
+        'peserta-rapat-delete' => 'Peserta Rapat Delete',
+
         'user-index' => 'User',
         'user-create' => 'User Create',
         'user-update' => 'User Update', 

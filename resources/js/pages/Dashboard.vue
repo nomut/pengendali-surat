@@ -14,6 +14,7 @@ const props = defineProps({
     latestSuratMasuk: Object,
     latestSuratKeluar: Object,
     latestSuratTugas: Object,
+    auth: Object,
 });
 
 const breadcrumbs = [{ label: 'Dashboard' }];
@@ -102,7 +103,7 @@ const formatDate = (value) => {
                         </Column>
                         <Column field="pengirim" header="Pengirim"></Column>
                         <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
-                        <Column bodyClass="text-center">
+                        <Column v-if="props.auth.permissions.includes('surat-tugas-index')" bodyClass="text-center">
                             <template #body="{ data }">
                                 <Link :href="route('surat-masuk.show', data.id)">
                                     <Button class="p-button-rounded p-button-link" v-tooltip.top="'Lihat Detail'">
@@ -127,7 +128,7 @@ const formatDate = (value) => {
                         </Column>
                         <Column field="tujuan" header="Tujuan"></Column>
                         <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
-                        <Column bodyClass="text-center">
+                        <Column v-if="props.auth.permissions.includes('surat-tugas-index')" bodyClass="text-center">
                             <template #body="{ data }">
                                 <Link :href="route('surat-keluar.show', data.id)">
                                     <Button class="p-button-rounded p-button-link" v-tooltip.top="'Lihat Detail'">
@@ -152,7 +153,7 @@ const formatDate = (value) => {
                         </Column>
                         <Column field="tujuan" header="Tujuan"></Column>
                         <Column field="perihal" class="truncate max-w-[230px]" header="Perihal"></Column>
-                        <Column bodyClass="text-center">
+                        <Column v-if="props.auth.permissions.includes('surat-tugas-index')" bodyClass="text-center">
                             <template #body="{ data }">
                                 <Link :href="route('surat-tugas.show', data.id)">
                                     <Button class="p-button-rounded p-button-link" v-tooltip.top="'Lihat Detail'">

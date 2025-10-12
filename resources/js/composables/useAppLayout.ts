@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
-import { LayoutGrid, Inbox, Info, Settings, LogOut, FileSearch, Users, Send, Compass} from 'lucide-vue-next';
+import { LayoutGrid, Inbox, Info, Settings, LogOut, FileSearch, Users, Send, Compass, CalendarClock} from 'lucide-vue-next';
 import { MenuItem } from '@/types';
 
 export function useAppLayout() {
@@ -20,6 +20,12 @@ export function useAppLayout() {
             lucideIcon: LayoutGrid,
             route: route('dashboard'),
             active: currentRoute.value == 'dashboard',
+        },
+        {
+            label: 'Rapat',
+            lucideIcon: CalendarClock,
+            route: route('meetings.index'),
+            isActive: route().current('meetings.*'),
         },
         {
             label: 'Surat Masuk',

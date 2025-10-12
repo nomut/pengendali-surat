@@ -66,25 +66,6 @@ const getRoleSeverity = (role) => (role === 'Administrator' ? 'danger' : 'info')
 
         <Card>
             <template #content>
-                <Toolbar class="mb-4">
-                    
-                    <template #end>
-                        <Link :href="route('users.create')" class="mr-2">
-                            <Button label="Tambah Pengguna" severity="success">
-                                <template #icon>
-                                    <Plus class="w-4 h-4 mr-2" />
-                                </template>
-                            </Button>
-                        </Link>
-                        <Link :href="route('users.roles.index')">
-                            <Button label="Peran" severity="primary">
-                                <template #icon>
-                                    <ShieldUser class="w-4 h-4 mr-2" />
-                                </template>
-                            </Button>
-                        </Link>
-                    </template>
-                </Toolbar>
 
                 <DataTable
                     :value="users.data"
@@ -92,9 +73,29 @@ const getRoleSeverity = (role) => (role === 'Administrator' ? 'danger' : 'info')
                     v-model:filters="filters"
                     stripedRows
                 >
+
                     <template #header>
-                        <h3 class="m-0 text-lg font-semibold">Daftar Pengguna</h3>
+                        <div class="flex justify-between items-center">
+                            <h3 class="m-0 text-lg font-semibold">Daftar Pengguna</h3>
+                            <div>
+                                <Link :href="route('users.create')" class="mr-2">
+                                    <Button label="Tambah Pengguna" severity="success">
+                                        <template #icon>
+                                            <Plus class="w-4 h-4 mr-2" />
+                                        </template>
+                                    </Button>
+                                </Link>
+                                <Link :href="route('users.roles.index')">
+                                    <Button label="Peran" severity="primary">
+                                        <template #icon>
+                                            <ShieldUser class="w-4 h-4 mr-2" />
+                                        </template>
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
                     </template>
+                    
                     <template #empty> Pengguna tidak ditemukan. </template>
 
                     <Column field="name" header="Nama" sortable />
