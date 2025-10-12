@@ -51,9 +51,40 @@ const onFilter = throttle((event) => {
     });
 }, 500);
 
+const onPage = (event) => {
+    // 1. Buat objek queryParams yang berisi semua filter yang ada
+    const queryParams = {
+        ...props.filters,
+        page: event.page + 1, // 2. Tambahkan halaman baru yang dituju
+    };
+
+    // 3. Hapus parameter yang kosong agar URL tetap bersih
+    Object.keys(queryParams).forEach(key => {
+        if (!queryParams[key]) delete queryParams[key];
+    });
+
+    // 4. Lakukan request ke server dengan semua parameter gabungan
+    router.get(route('surat-keluar.index'), queryParams, {
+        preserveState: true,
+        replace: true, // Gunakan replace agar tidak menumpuk riwayat browser
+    });
+};
+
 const onSort = (event) => {
-    const queryParams = { ...props.filters, sortField: event.sortField, sortOrder: event.sortOrder };
-    router.get(route('surat-keluar.index'), queryParams, { preserveState: true, replace: true });
+    const queryParams = {
+        ...props.filters,
+        sortField: event.sortField,
+        sortOrder: event.sortOrder,
+    };
+
+    Object.keys(queryParams).forEach(key => {
+        if (!queryParams[key]) delete queryParams[key];
+    });
+
+    router.get(route('surat-keluar.index'), queryParams, {
+        preserveState: true,
+        replace: true,
+    });
 };
 
 const formatDate = (value) => new Date(value).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -80,7 +111,11 @@ const deleteSurat = (surat) => {
             <template #content>
                 <DataTable 
                     :value="suratKeluar.data" 
-                    paginator :rows="10" stripedRows lazy
+                    @page="onPage"
+                    paginator 
+                    :rows="10" 
+                    stripedRows 
+                    lazy
                     :totalRecords="suratKeluar.total"
                     v-model:filters="dtFilters"      
                     filterDisplay="menu"              
