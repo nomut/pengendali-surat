@@ -40,7 +40,7 @@ const sekertaris = ref([
     { nama: 'M.ANGGRAINI ADRIANI', jabatan: 'SEKERTARIS' },
     { nama: 'IR. TRI MARTINI', jabatan: 'SEKERTARIS I', sub: 'URUSAN PERENCANAAN' },
     { nama: 'DARA KUSUMAWATI, SE, MM', jabatan: 'SEKERTARIS II', sub: 'URUSAN HUMAS & IT' },
-    { nama: 'DARA KUSUMAWATI, SE, MM', jabatan: 'SEKERTARIS III', sub: 'URUSAN UMUM' },
+    { nama: 'NUGRAHENI SIH WINANTI, SH', jabatan: 'SEKERTARIS III', sub: 'URUSAN UMUM' },
 ]);
 
 const ketuaBidang = ref([
