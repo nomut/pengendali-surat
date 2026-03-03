@@ -1,83 +1,15 @@
 <script setup>
-import AppLayout from '@/layouts-blog/AppLayout.vue'; // Pastikan path ini sesuai
-import { ref } from 'vue';
-
-import ketuaPkkDiy from '@/assets/images/org/ketua-pkk-diy.png';
-import wakilKetuaPkkDiy from '@/assets/images/org/wakil-ketua-pkk-diy.png';
+import AppLayout from '@/layouts-blog/AppLayout.vue';
+import { computed } from 'vue';
 import homeBg from '@/assets/images/home-background.png'
-defineProps({
+
+const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
+    page: Object,
 });
-
-// --- DATA STRUKTUR ORGANISASI ---
-const ketuaDanWakil = ref([
-    {
-        nama: 'GUSTI KANJENG RATU HEMAS',
-        jabatan: 'KETUA TP PKK',
-        foto: ketuaPkkDiy
-    },
-    {
-        nama: 'GKBRAA PAKU ALAM',
-        jabatan: 'WAKIL KETUA TP PKK',
-        foto: wakilKetuaPkkDiy
-    },
-]);
-
-const penasehat = ref([
-    { nama: 'GKBRAY. KUSWARJANTI RIYOKUSUMO' },
-    { nama: 'Dr. Dra. I. M. SUNARSIH SUTARYO, SU, Apt' },
-    { nama: 'Dr. SISWATININGSIH. SU' },
-]);
-
-const bendahara = ref([
-    { nama: 'SUGIANTI' },
-]);
-
-const sekertaris = ref([
-    { nama: 'M.ANGGRAINI ADRIANI', jabatan: 'SEKERTARIS' },
-    { nama: 'IR. TRI MARTINI', jabatan: 'SEKERTARIS I', sub: 'URUSAN PERENCANAAN' },
-    { nama: 'DARA KUSUMAWATI, SE, MM', jabatan: 'SEKERTARIS II', sub: 'URUSAN HUMAS & IT' },
-    { nama: 'NUGRAHENI SIH WINANTI, SH', jabatan: 'SEKERTARIS III', sub: 'URUSAN UMUM' },
-]);
-
-const ketuaBidang = ref([
-    { nama: 'Dra. KRISTIANA SWASTI, MSi', jabatan: 'KETUA 1', sub: 'PEMBINAAN KARAKTER KELUARGA' },
-    { nama: 'Dra. TATIK RATNAWATI, MM', jabatan: 'KETUA II', sub: 'PENDIDIKAN DAN PENINGKATAN EKONOMI KELUARGA' },
-    { nama: 'T.O SUPRAPTO', jabatan: 'KETUA III', sub: 'PENGUATAN KETAHANAN KELUARGA' },
-    { nama: 'Drg. INNI HIKMATIN M.Kes', jabatan: 'KETUA IV', sub: 'KESEHATAN KELUARGA DAN LINGKUNGAN' },
-]);
-
-const pokja1 = ref([
-    { nama: 'ATIK WULANDARI, SP', jabatan: 'KETUA' },
-    { nama: 'Dra. BASKOROWATI', jabatan: 'ANGGOTA' },
-    { nama: 'TRI SUNDARI', jabatan: 'ANGGOTA' },
-    { nama: 'SURYANTINAH, SIP, MM', jabatan: 'ANGGOTA' },
-]);
-
-const pokja2 = ref([
-    { nama: 'TUTIK MULYANTO, S.Sos', jabatan: 'KETUA' },
-    { nama: 'SUPRIHATININGSHI', jabatan: 'ANGGOTA' },
-    { nama: 'PUJI ASTUTI', jabatan: 'ANGGOTA' },
-    { nama: 'YURRY APRITO', jabatan: 'ANGGOTA' },
-]);
-
-const pokja3 = ref([
-    { nama: 'RUKIWIYATI', jabatan: 'KETUA' },
-    { nama: 'Ir. INDIYAH WIDNINGSIH', jabatan: 'ANGGOTA' },
-    { nama: 'SRI SUKARNI SUWARDI', jabatan: 'ANGGOTA' },
-    { nama: 'IR. ANING INDRAWATI', jabatan: 'ANGGOTA' },
-]);
-
-const pokja4 = ref([
-    { nama: 'SRI HERAWATI, SH, MSI', jabatan: 'KETUA' },
-    { nama: 'SRI HARTATI, SKM, M.Kes', jabatan: 'ANGGOTA' },
-    { nama: 'WITRI ASTUTI ANGGRASNI, SE', jabatan: 'ANGGOTA' },
-    { nama: 'SRI MUKTISUNARDINI, SKM, M.Kes', jabatan: 'ANGGOTA' },
-]);
-
 
 const vAnimateOnScroll = {
   mounted: (el) => {
@@ -95,6 +27,19 @@ const vAnimateOnScroll = {
     );
     observer.observe(el);
   },
+};
+
+const meta = computed(() => props.page?.meta || {});
+const ketuaDanWakil = computed(() => meta.value.ketua_dan_wakil || []);
+const penasehat = computed(() => meta.value.penasehat || []);
+const bendahara = computed(() => meta.value.bendahara || []);
+const sekertaris = computed(() => meta.value.sekertaris || []);
+const ketuaBidang = computed(() => meta.value.ketua_bidang || []);
+const pokjaList = computed(() => meta.value.pokja || []);
+
+const getImageUrl = (path) => {
+    if (!path) return null;
+    return `/storage/${path}`;
 };
 </script>
 
@@ -122,7 +67,10 @@ const vAnimateOnScroll = {
                     <div v-animate-on-scroll class="animate-on-scroll text-center mb-16">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                             <div v-for="p in ketuaDanWakil" :key="p.jabatan" class="frosted-glass-card rounded-2xl p-6 flex flex-col items-center shadow-lg">
-                                <img :src="p.foto" :alt="p.nama" class="w-64 h-64 rounded-full mb-4 object-cover shadow-md border-4 border-white">
+                                <div class="w-64 h-64 rounded-full mb-4 bg-slate-200 flex items-center justify-center overflow-hidden shadow-inner">
+                                    <img v-if="p.foto_path" :src="getImageUrl(p.foto_path)" class="w-full h-full object-cover" :alt="p.nama">
+                                    <span v-else class="text-6xl font-bold text-slate-400">{{ p.nama?.charAt(0) || '?' }}</span>
+                                </div>
                                 <h3 class="font-bold text-xl text-slate-800 text-center uppercase">{{ p.nama }}</h3>
                                 <p class="text-sky-600 font-semibold">{{ p.jabatan }}</p>
                             </div>
@@ -132,14 +80,26 @@ const vAnimateOnScroll = {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-16">
                         <div v-animate-on-scroll class="animate-on-scroll frosted-glass-card rounded-2xl p-8">
                             <h2 class="text-2xl font-bold text-slate-900 mb-4 text-center">PENASEHAT</h2>
-                            <ul class="space-y-2 text-center">
-                                <li v-for="p in penasehat" :key="p.nama" class="text-slate-700 font-medium uppercase">{{ p.nama }}</li>
+                            <ul class="space-y-4">
+                                <li v-for="p in penasehat" :key="p.nama" class="flex flex-col sm:flex-row items-center gap-4 bg-white/50 p-3 rounded-xl border border-white/40 shadow-sm">
+                                    <div class="w-16 h-16 bg-slate-200 rounded-full overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
+                                        <img v-if="p.foto_path" :src="getImageUrl(p.foto_path)" class="w-full h-full object-cover">
+                                        <span v-else class="text-slate-400 font-bold text-2xl" v-text="p.nama?.charAt(0) || '?'" />
+                                    </div>
+                                    <span class="text-slate-800 font-bold uppercase text-center sm:text-left">{{ p.nama }}</span>
+                                </li>
                             </ul>
                         </div>
                         <div v-animate-on-scroll class="animate-on-scroll frosted-glass-card rounded-2xl p-8">
                             <h2 class="text-2xl font-bold text-slate-900 mb-4 text-center">BENDAHARA</h2>
-                            <ul class="space-y-2 text-center">
-                                <li v-for="p in bendahara" :key="p.nama" class="text-slate-700 font-medium uppercase">{{ p.nama }}</li>
+                            <ul class="space-y-4">
+                                <li v-for="p in bendahara" :key="p.nama" class="flex flex-col sm:flex-row items-center gap-4 bg-white/50 p-3 rounded-xl border border-white/40 shadow-sm">
+                                    <div class="w-16 h-16 bg-slate-200 rounded-full overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
+                                        <img v-if="p.foto_path" :src="getImageUrl(p.foto_path)" class="w-full h-full object-cover">
+                                        <span v-else class="text-slate-400 font-bold text-2xl" v-text="p.nama?.charAt(0) || '?'" />
+                                    </div>
+                                    <span class="text-slate-800 font-bold uppercase text-center sm:text-left">{{ p.nama }}</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -147,20 +107,28 @@ const vAnimateOnScroll = {
                     <div v-animate-on-scroll class="animate-on-scroll frosted-glass-card rounded-2xl p-8 my-16">
                         <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">SEKERTARIS</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                            <div v-for="s in sekertaris" :key="s.jabatan" class="p-4 bg-slate-50 rounded-lg">
-                                <p class="text-sky-600 text-sm font-medium  mb-3">{{ s.jabatan }}</p>
-                                <p class="font-semibold text-slate-800 uppercase">{{ s.nama }}</p>
+                            <div v-for="s in sekertaris" :key="s.jabatan" class="p-4 bg-slate-50 flex flex-col items-center rounded-lg border shadow-sm">
+                                <div class="w-20 h-20 bg-slate-200 rounded-full overflow-hidden mb-3 shadow-inner flex items-center justify-center">
+                                    <img v-if="s.foto_path" :src="getImageUrl(s.foto_path)" class="w-full h-full object-cover">
+                                    <span v-else class="text-slate-400 font-bold text-3xl" v-text="s.nama?.charAt(0) || '?'" />
+                                </div>
+                                <p class="text-sky-600 text-sm font-medium mb-1">{{ s.jabatan }}</p>
+                                <p class="font-semibold text-slate-800 uppercase text-sm mb-1 line-clamp-2">{{ s.nama }}</p>
                                 <p v-if="s.sub" class="text-xs text-slate-500">{{ s.sub }}</p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div v-animate-on-scroll class="animate-on-scroll frosted-glass-card rounded-2xl p-8 my-16">
                         <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">KETUA BIDANG</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                            <div v-for="k in ketuaBidang" :key="k.jabatan" class="p-4 bg-sky-50 rounded-lg">
-                                <p class="text-sky-600 text-sm font-medium mb-3">{{ k.jabatan }}</p>
-                                <p class="font-semibold text-slate-800 uppercase">{{ k.nama }}</p>
+                            <div v-for="k in ketuaBidang" :key="k.jabatan" class="p-4 bg-sky-50 flex flex-col items-center rounded-lg border border-sky-100 shadow-sm">
+                                <div class="w-20 h-20 bg-slate-200 rounded-full overflow-hidden mb-3 shadow-inner flex items-center justify-center">
+                                    <img v-if="k.foto_path" :src="getImageUrl(k.foto_path)" class="w-full h-full object-cover">
+                                    <span v-else class="text-slate-400 font-bold text-3xl" v-text="k.nama?.charAt(0) || '?'" />
+                                </div>
+                                <p class="text-sky-600 text-sm font-medium mb-1">{{ k.jabatan }}</p>
+                                <p class="font-semibold text-slate-800 uppercase text-sm mb-1 line-clamp-2">{{ k.nama }}</p>
                                 <p class="text-xs text-slate-500 leading-tight mt-1">{{ k.sub }}</p>
                             </div>
                         </div>
@@ -169,43 +137,19 @@ const vAnimateOnScroll = {
                     <div v-animate-on-scroll class="animate-on-scroll my-16">
                         <h2 class="text-3xl font-bold text-slate-900 mb-8 text-center">KELOMPOK KERJA (POKJA)</h2>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                            <div class="frosted-glass-card rounded-2xl p-6">
-                                <h3 class="font-bold text-xl text-center text-slate-800 mb-4">POKJA I</h3>
+                            <div v-for="pokja in pokjaList" :key="pokja.nama" class="frosted-glass-card rounded-2xl p-6">
+                                <h3 class="font-bold text-xl text-center text-slate-800 mb-4">{{ pokja.nama }}</h3>
                                 <ul class="space-y-3">
-                                    <li v-for="p in pokja1" :key="p.nama" class="p-2 bg-slate-50/50 rounded-md">
-                                        <span class="text-sm text-sky-600 font-semibold">{{ p.jabatan }}</span>
-                                        <br>
-                                        <span class="uppercase font-medium text-sm text-slate-700">{{ p.nama }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="frosted-glass-card rounded-2xl p-6">
-                                <h3 class="font-bold text-xl text-center text-slate-800 mb-4">POKJA II</h3>
-                                <ul class="space-y-3">
-                                    <li v-for="p in pokja2" :key="p.nama" class="p-2 bg-slate-50/50 rounded-md">
-                                        <span class="text-sm text-sky-600 font-semibold">{{ p.jabatan }}</span>
-                                        <br>
-                                        <span class="uppercase font-medium text-sm text-slate-700">{{ p.nama }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="frosted-glass-card rounded-2xl p-6">
-                                <h3 class="font-bold text-xl text-center text-slate-800 mb-4">POKJA III</h3>
-                                <ul class="space-y-3">
-                                    <li v-for="p in pokja3" :key="p.nama" class="p-2 bg-slate-50/50 rounded-md">
-                                        <span class="text-sm text-sky-600 font-semibold">{{ p.jabatan }}</span>
-                                        <br>
-                                        <span class="uppercase font-medium text-sm text-slate-700">{{ p.nama }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="frosted-glass-card rounded-2xl p-6">
-                                <h3 class="font-bold text-xl text-center text-slate-800 mb-4">POKJA IV</h3>
-                                <ul class="space-y-3">
-                                    <li v-for="p in pokja4" :key="p.nama" class="fp-2 bg-slate-50/50 rounded-md">
-                                        <span class="text-sm text-sky-600 font-semibold">{{ p.jabatan }}</span>
-                                        <br>
-                                        <span class="uppercase font-medium text-sm text-slate-700">{{ p.nama }}</span>
+                                    <li v-for="p in pokja.anggota" :key="p.nama" class="p-3 bg-slate-50/50 rounded-md flex items-center gap-4 text-left">
+                                        <div class="w-12 h-12 shrink-0 bg-slate-200 rounded-full overflow-hidden flex items-center justify-center shadow-sm">
+                                            <img v-if="p.foto_path" :src="getImageUrl(p.foto_path)" class="w-full h-full object-cover">
+                                            <span v-else class="text-lg font-bold text-slate-400">{{ p.nama?.charAt(0) || '?' }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm text-sky-600 font-semibold">{{ p.jabatan }}</span>
+                                            <br>
+                                            <span class="uppercase font-medium text-sm text-slate-700">{{ p.nama }}</span>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>

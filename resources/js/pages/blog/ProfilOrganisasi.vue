@@ -1,13 +1,15 @@
 <script setup>
-import AppLayout from '@/layouts-blog/AppLayout.vue'; // Pastikan path ini sesuai
-import { ref } from 'vue';
+import AppLayout from '@/layouts-blog/AppLayout.vue';
+import { computed } from 'vue';
 import { Target, ClipboardCheck } from 'lucide-vue-next';
 import homeBg from '@/assets/images/home-background.png'
-defineProps({
+
+const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
+    page: Object,
 });
 
 const vAnimateOnScroll = {
@@ -30,6 +32,9 @@ const vAnimateOnScroll = {
     observer.observe(el);
   },
 };
+
+const visi = computed(() => props.page?.meta?.visi || '');
+const misi = computed(() => props.page?.meta?.misi || '');
 </script>
 
 <template>
@@ -56,17 +61,11 @@ const vAnimateOnScroll = {
                 </div>
             </section>
 
-
             <section class="py-20 sm:py-24">
                 <div class="container mx-auto px-4 sm:px-6">
                     <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                         <div v-animate-on-scroll class="animate-on-scroll">
-                            <h2 class="text-3xl font-bold text-slate-800 mb-4">Sejarah Singkat</h2>
-                            <p class="tracking-wide leading-normal text-slate-600 space-y-4">
-                                Gerakan Pemberdayaan dan Kesejahteraan Keluarga (PKK) sebagai gerakan pembangunan masyarakat bermula dari seminar Home Economic di Bogor pada tahun 1957. Sebagai tindak lanjut dari seminar tersebut, pada tahun 1961 panitia penyusunan tata susunan pelajaran pada Pendidikan Kesejahteraan Keluarga (PKK) Kementerian Pendidikan.
-                                <br><br>
-                                Di Daerah Istimewa Yogyakarta, gerakan ini telah menjadi tulang punggung dalam upaya peningkatan kualitas hidup keluarga, adaptif terhadap perubahan zaman, dan terus berinovasi untuk memberdayakan perempuan dan masyarakat secara luas.
-                            </p>
+                            <div v-if="page?.content" v-html="page.content" class="prose prose-slate max-w-none [&>h2]:text-3xl [&>h2]:font-bold [&>h2]:text-slate-800 [&>h2]:mb-4 [&>p]:tracking-wide [&>p]:leading-normal [&>p]:text-slate-600"></div>
                         </div>
                         <div v-animate-on-scroll class="animate-on-scroll w-full h-80 rounded-2xl p-2 frosted-glass-card" style="transition-delay: 200ms">
                             <img :src="homeBg" alt="Gedung bersejarah di Yogyakarta" class="w-full h-full object-cover rounded-xl shadow-lg">
@@ -83,14 +82,14 @@ const vAnimateOnScroll = {
                                 <Target class="w-8 h-8 text-sky-600" />
                             </div>
                             <h2 class="text-2xl font-bold text-slate-800 mb-2">Visi</h2>
-                            <p class="tracking-wide leading-normal text-slate-600">Terwujudnya keluarga yang beriman dan bertaqwa kepada Tuhan Yang Maha Esa, berakhlak mulia dan berbudi luhur, sehat sejahtera, maju dan mandiri, kesetaraan dan keadilan gender serta kesadaran hukum dan lingkungan.</p>
+                            <p class="tracking-wide leading-normal text-slate-600">{{ visi }}</p>
                         </div>
                         <div v-animate-on-scroll class="animate-on-scroll frosted-glass-card rounded-2xl p-8 text-center" style="transition-delay: 200ms">
                             <div class="inline-flex p-4 bg-sky-100 rounded-full mb-4">
                                 <ClipboardCheck class="w-8 h-8 text-sky-600" />
                             </div>
                             <h2 class="text-2xl font-bold text-slate-800 mb-2">Misi</h2>
-                            <p class="tracking-wide leading-normal text-slate-600">Meningkatkan kualitas sumber daya manusia, memperkuat ketahanan ekonomi keluarga, serta melestarikan lingkungan hidup sambil meningkatkan kesadaran hukum dan partisipasi masyarakat.</p>
+                            <p class="tracking-wide leading-normal text-slate-600">{{ misi }}</p>
                         </div>
                     </div>
                 </div>

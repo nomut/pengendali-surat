@@ -1,24 +1,22 @@
 <?php
 
-use App\Http\Controllers\MeetingController;
-use App\Http\Controllers\PersonController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\SuratMasukController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SuratKeluarController;
-use App\Http\Controllers\SuratTugasController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Spatie\Permission\Contracts\Role;
 
 Route::get('/', [GuestController::class, "home"])->name('home');
 Route::get('/kelompok-kerja/{kelompokKerja?}', [GuestController::class, "kelompokKerja"])->name('kelompok-kerja');
 Route::get('/profil-organisasi', [GuestController::class, "profilOrganisasi"])->name('profil-organisasi');
 Route::get('/struktur-organisasi', [GuestController::class, "strukturOrganisasi"])->name('struktur-organisasi');
+
+// Public File Access for Images
+Route::get('/files/{file}/preview', [FileController::class, 'preview'])->name('files.preview');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -38,55 +36,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('can:user-update');
     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update')->middleware('can:user-update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy')->middleware('can:user-delete');
-    
-    // Surat Masuk
-    Route::get('surat-masuk', [SuratMasukController::class, 'index'])->name('surat-masuk.index')->middleware('can:surat-masuk-index');
-    Route::get('surat-masuk/create', [SuratMasukController::class, 'create'])->name('surat-masuk.create')->middleware('can:surat-masuk-create');
-    Route::post('surat-masuk', [SuratMasukController::class, 'store'])->name('surat-masuk.store')->middleware('can:surat-masuk-create');
-    Route::get('surat-masuk/{surat_masuk}/show', [SuratMasukController::class, 'show'])->name('surat-masuk.show')->middleware('can:surat-masuk-index');
-    Route::get('surat-masuk/{surat_masuk}/edit', [SuratMasukController::class, 'edit'])->name('surat-masuk.edit')->middleware('can:surat-masuk-update');
-    Route::put('surat-masuk/{surat_masuk}', [SuratMasukController::class, 'update'])->name('surat-masuk.update')->middleware('can:surat-masuk-update');
-    Route::delete('surat-masuk/{surat_masuk}', [SuratMasukController::class, 'destroy'])->name('surat-masuk.destroy')->middleware('can:surat-masuk-delete');
 
-    // Surat Keluar
-    Route::get('surat-keluar', [SuratKeluarController::class, 'index'])->name('surat-keluar.index')->middleware('can:surat-keluar-index');
-    Route::get('surat-keluar/create', [SuratKeluarController::class, 'create'])->name('surat-keluar.create')->middleware('can:surat-keluar-create');
-    Route::post('surat-keluar', [SuratKeluarController::class, 'store'])->name('surat-keluar.store')->middleware('can:surat-keluar-create');
-    Route::get('surat-keluar/{surat_keluar}/show', [SuratKeluarController::class, 'show'])->name('surat-keluar.show')->middleware('can:surat-keluar-index');
-    Route::get('surat-keluar/{surat_keluar}/edit', [SuratKeluarController::class, 'edit'])->name('surat-keluar.edit')->middleware('can:surat-keluar-update');
-    Route::put('surat-keluar/{surat_keluar}', [SuratKeluarController::class, 'update'])->name('surat-keluar.update')->middleware('can:surat-keluar-update');
-    Route::delete('surat-keluar/{surat_keluar}', [SuratKeluarController::class, 'destroy'])->name('surat-keluar.destroy')->middleware('can:surat-keluar-delete');
-    
-    // Surat Tugas
-    Route::get('surat-tugas', [SuratTugasController::class, 'index'])->name('surat-tugas.index')->middleware('can:surat-tugas-index');
-    Route::get('surat-tugas/create', [SuratTugasController::class, 'create'])->name('surat-tugas.create')->middleware('can:surat-tugas-create');
-    Route::post('surat-tugas', [SuratTugasController::class, 'store'])->name('surat-tugas.store')->middleware('can:surat-tugas-create');
-    Route::get('surat-tugas/{surat_tugas}/show', [SuratTugasController::class, 'show'])->name('surat-tugas.show')->middleware('can:surat-tugas-index');
-    Route::get('surat-tugas/{surat_tugas}/edit', [SuratTugasController::class, 'edit'])->name('surat-tugas.edit')->middleware('can:surat-tugas-update');
-    Route::put('surat-tugas/{surat_tugas}', [SuratTugasController::class, 'update'])->name('surat-tugas.update')->middleware('can:surat-tugas-update');
-    Route::delete('surat-tugas/{surat_tugas}', [SuratTugasController::class, 'destroy'])->name('surat-tugas.destroy')->middleware('can:surat-tugas-delete');
-
-    // Meetings
-    Route::get('meetings', [MeetingController::class, 'index'])->name('meetings.index')->middleware('can:rapat-index');
-    Route::get('meetings/create', [MeetingController::class, 'create'])->name('meetings.create')->middleware('can:rapat-create');
-    Route::post('meetings', [MeetingController::class, 'store'])->name('meetings.store')->middleware('can:rapat-create');
-    Route::get('meetings/{meeting}', [MeetingController::class, 'show'])->name('meetings.show')->middleware('can:rapat-index');
-    Route::get('meetings/{meeting}/edit', [MeetingController::class, 'edit'])->name('meetings.edit')->middleware('can:rapat-update');
-    Route::put('meetings/{meeting}', [MeetingController::class, 'update'])->name('meetings.update')->middleware('can:rapat-update');
-    Route::delete('meetings/{meeting}', [MeetingController::class, 'destroy'])->name('meetings.destroy')->middleware('can:rapat-delete');
-
-    // Persons
-    Route::get('persons', [PersonController::class, 'index'])->name('persons.index')->middleware('can:peserta-rapat-index');
-    Route::post('persons', [PersonController::class, 'store'])->name('persons.store')->middleware('can:peserta-rapat-create');
-    Route::get('persons/{person}/edit', [PersonController::class, 'edit'])->name('persons.edit')->middleware('can:peserta-rapat-update');
-    Route::put('persons/{person}', [PersonController::class, 'update'])->name('persons.update')->middleware('can:peserta-rapat-update');
-    Route::delete('persons/{person}', [PersonController::class, 'destroy'])->name('persons.destroy')->middleware('can:peserta-rapat-delete');
-  
+    // CMS - Halaman
+    Route::get('cms', [PageController::class, 'index'])->name('cms.index')->middleware('can:cms-index');
+    Route::get('cms/{page}/edit', [PageController::class, 'edit'])->name('cms.edit')->middleware('can:cms-update');
+    Route::put('cms/{page}', [PageController::class, 'update'])->name('cms.update')->middleware('can:cms-update');
 
     // File Management
     Route::post('/files', [FileController::class, 'store'])->name('files.store');
     Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
-    Route::get('/files/{file}/preview', [FileController::class, 'preview'])->name('files.preview');
     Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
 });
 

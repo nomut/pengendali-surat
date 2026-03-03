@@ -92,14 +92,6 @@ const menuItems = ref([
                                 <Button label="Dashboard" class="w-full" />
                             </InertiaLink>
                         </template>
-                        <template v-else>
-                            <InertiaLink :href="route('login')" class="block mb-3" @click="toggleMobileMenu">
-                                <Button label="Login" class="w-full futuristic-button-light" />
-                            </InertiaLink>
-                            <!-- <InertiaLink :href="route('register')" @click="toggleMobileMenu">
-                                <Button label="Register" outlined class="w-full !border-sky-500 !text-sky-500" />
-                            </InertiaLink> -->
-                        </template>
                     </div>
                 </template>
             </Drawer>
@@ -119,30 +111,24 @@ const menuItems = ref([
                 </span>
             </InertiaLink>
             
-            <nav class="hidden md:flex items-center space-x-8">
-                <Menubar
-                    :model="menuItems"
-                    class="text-lg"
-                    pt:root:class="px-0 py-4 border-0 rounded-none  bg-transparent"
-                    pt:button:class="hidden"
-                >
-                </Menubar>
-            </nav>
+            <div class="hidden md:flex items-center space-x-6 ml-auto">
+                <nav class="flex items-center">
+                    <Menubar
+                        :model="menuItems"
+                        class="text-lg"
+                        pt:root:class="px-0 py-4 border-0 rounded-none bg-transparent"
+                        pt:button:class="hidden"
+                    >
+                    </Menubar>
+                </nav>
 
-            <div class="hidden md:flex items-center space-x-2">
-                <template v-if="page.props.auth.user">
-                    <InertiaLink :href="route('dashboard')">
-                        <Button label="Dashboard" text class="text-slate-700 hover:bg-black/5" />
-                    </InertiaLink>
-                </template>
-                <template v-else>
-                    <InertiaLink :href="route('login')">
-                        <Button label="Login" text class="text-slate-700 hover:bg-black/5" />
-                    </InertiaLink>
-                    <!-- <InertiaLink :href="route('register')">
-                        <Button label="Register" outlined class="!border-sky-500 !text-sky-500 hover:!bg-sky-500/10" />
-                    </InertiaLink> -->
-                </template>
+                <div class="flex items-center space-x-2">
+                    <template v-if="page.props.auth.user">
+                        <InertiaLink :href="route('dashboard')">
+                            <Button label="Dashboard" text class="text-slate-700 hover:bg-black/5" />
+                        </InertiaLink>
+                    </template>
+                </div>
             </div>
             <div class="md:hidden">
                 <Button text rounded aria-label="Toggle Menu" @click="toggleMobileMenu" class="!p-2 text-slate-800" >

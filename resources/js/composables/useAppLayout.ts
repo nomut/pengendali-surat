@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
-import { LayoutGrid, Inbox, Info, Settings, LogOut, FileSearch, Users, Send, Compass, CalendarClock} from 'lucide-vue-next';
+import { LayoutGrid, Info, Settings, LogOut, FileSearch, Users } from 'lucide-vue-next';
 import { MenuItem } from '@/types';
 
 export function useAppLayout() {
@@ -12,7 +12,7 @@ export function useAppLayout() {
         /* eslint-enable @typescript-eslint/no-unused-vars */
         return route().current();
     });
-    
+
     // Menu items
     const menuItems = computed<MenuItem[]>(() => [
         {
@@ -22,31 +22,11 @@ export function useAppLayout() {
             active: currentRoute.value == 'dashboard',
         },
         {
-            label: 'Rapat',
-            lucideIcon: CalendarClock,
-            route: route('meetings.index'),
-            isActive: route().current('meetings.*'),
-        },
-        {
-            label: 'Surat Masuk',
-            lucideIcon: Inbox,
-            route: route('surat-masuk.index'),
-            active: currentRoute.value == 'users',
-            visible: page.props.auth.permissions.includes('surat-masuk-index'),
-        },
-        {
-            label: 'Surat Keluar',
-            lucideIcon: Send,
-            route: route('surat-keluar.index'),
-            active: currentRoute.value == 'surat-keluar',
-            visible: page.props.auth.permissions.includes('surat-keluar-index'),
-        },
-        {
-            label: 'Surat Tugas',
-            lucideIcon: Compass,
-            route: route('surat-tugas.index'),
-            active: currentRoute.value == 'surat-tugas',
-            visible: page.props.auth.permissions.includes('surat-tugas-index'),
+            label: 'CMS Halaman',
+            lucideIcon: FileSearch,
+            route: route('cms.index'),
+            isActive: route().current('cms.*'),
+            visible: page.props.auth.permissions.includes('cms-index'),
         },
         {
             label: 'Pengguna',

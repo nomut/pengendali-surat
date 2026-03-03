@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
         $user->assignRole($role);
+
+        $this->call(PageSeeder::class);
     }
 
     private function createPermissions($abilities) : void

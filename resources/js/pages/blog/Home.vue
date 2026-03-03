@@ -1,9 +1,8 @@
 <script setup>
 import AppLayout from '@/layouts-blog/AppLayout.vue';
-import Button from 'primevue/button';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import {
-    Users, Shield, Wallet, Stethoscope, BookText
+    Users, Shield, Wallet, Stethoscope
 } from 'lucide-vue-next';
 
 import imgPokja1Landscape from '@/assets/images/pokja1-landscape.png'
@@ -12,13 +11,13 @@ import imgPokja3Landscape from '@/assets/images/pokja3-landscape.png'
 import imgPokja4Landscape from '@/assets/images/pokja4-landscape.png'
 import homeBg from '@/assets/images/home-background.png'
 
-defineProps({
+const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
+    page: Object,
 });
-
 
 const vAnimateOnScroll = {
   mounted: (el) => {
@@ -32,39 +31,32 @@ const vAnimateOnScroll = {
           }
         });
       },
-      { 
+      {
         root: scrollContainer,
-        threshold: 0.1 
+        threshold: 0.1
       }
     );
     observer.observe(el);
   },
 };
 
+const icons = [Users, Wallet, Shield, Stethoscope];
+const images = [imgPokja1Landscape, imgPokja2Landscape, imgPokja3Landscape, imgPokja4Landscape];
 
-const kelompokKerja = ref([
-    {
-        title: 'Pembinaan Karakter Keluarga',
-        description: 'Pembinaan karakter keluarga berfokus pada penguatan nilai moral, etika, dan budaya luhur dalam keluarga. Programnya mendorong pola asuh positif, ketahanan keluarga, serta peran orang tua dalam pendidikan karakter anak, sehingga keluarga menjadi dasar pembentukan generasi yang berakhlak mulia, tangguh, dan harmonis.',
-        icon: Users,
-        image: imgPokja1Landscape
-    }, {
-        title: 'Pendidikan Dan Peningkatan Ekonomi Keluarga',
-        description: 'Bidang Pendidikan dan Peningkatan Ekonomi Keluarga berupaya meningkatkan kualitas sumber daya manusia serta kemandirian ekonomi keluarga. Program yang dijalankan mencakup penguatan pendidikan nonformal, pelatihan keterampilan, serta pemberdayaan usaha mikro dan rumah tangga. Bidang ini mendorong keluarga untuk lebih kreatif, produktif, dan adaptif, sehingga mampu meningkatkan kesejahteraan serta mendukung terwujudnya keluarga mandiri dan berdaya saing di DIY.',
-        icon: Wallet,
-        image: imgPokja2Landscape
-    }, {
-        title: 'Penguatan Ketahanan Keluarga',
-        description: 'Penguatan Ketahanan Keluarga berfokus pada upaya membangun keluarga yang sehat, harmonis, dan tangguh menghadapi tantangan zaman. Programnya meliputi peningkatan kualitas hubungan antaranggota keluarga, kesehatan jasmani dan rohani, serta kesadaran akan pentingnya lingkungan yang aman dan nyaman. Dengan pembinaan berkelanjutan, bidang ini mendorong keluarga di DIY agar menjadi fondasi kuat bagi terciptanya masyarakat yang sejahtera dan berkarakter.',
-        icon: Shield,
-        image: imgPokja3Landscape
-    }, {
-        title: 'Kesehatan Keluarga Dan Lingkungan',
-        description: 'Kesehatan Keluarga dan Lingkungan berkomitmen meningkatkan kualitas hidup masyarakat dengan mendorong perilaku hidup bersih dan sehat. Programnya mencakup edukasi gizi, kesehatan ibu dan anak, pencegahan penyakit, serta pengelolaan lingkungan yang bersih dan ramah. Bidang ini menekankan peran keluarga sebagai agen utama dalam menjaga kesehatan sekaligus menciptakan lingkungan yang layak huni, sehat, dan berkelanjutan bagi generasi mendatang.',
-        icon: Stethoscope,
-        image: imgPokja4Landscape
-    }
-]);
+const getImageUrl = (path) => {
+    if (!path) return null;
+    return `/storage/${path}`;
+};
+
+const kelompokKerja = computed(() => {
+    const meta = props.page?.meta;
+    const items = meta?.kelompok_kerja || [];
+    return items.map((item, index) => ({
+        ...item,
+        icon: icons[index] || Users,
+        image: item.foto_path ? getImageUrl(item.foto_path) : (images[index] || imgPokja1Landscape),
+    }));
+});
 
 const furtherLinks = ref([
     { label: 'Pokja I', icon: Users, route: route('kelompok-kerja', {kelompokKerja:'pokja-1'}) },
@@ -76,8 +68,8 @@ const furtherLinks = ref([
 
 <template>
     <InertiaHead title="Selamat Datang" />
-    <AppLayout 
-        :can-login="canLogin" 
+    <AppLayout
+        :can-login="canLogin"
         :can-register="canRegister"
         :laravel-version="laravelVersion"
         :php-version="phpVersion"
@@ -89,13 +81,8 @@ const furtherLinks = ref([
             >
                 <div class="absolute inset-0 bg-black/20"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10">
-                    <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight tracking-tighter mb-6 drop-shadow-sm">
-                        PKK DIY Teguhkan Komitmen Menuju Indonesia Emas
-                    </h1>
-                    <p class="text-white text-lg max-w-3xl mx-auto mb-8 drop-shadow-sm font-bold bg-black/40 backdrop-blur-sm px-4 py-2 rounded-lg">
-                        Terwujudnya Keluarga Beriman dan Bertaqwa kepada Tuhan Yang Maha Esa, Berakhlak Mulia, dan Berbudi Luhur, Sehat, Sejahtera, Maju, Mandiri, Kesetaraan dan Keadilan Gender, serta Kesadaran Hukum dan Lingkungan.
-                    </p>
-                    
+                    <div v-if="page?.content" v-html="page.content" class="text-white [&>h1]:text-4xl [&>h1]:md:text-6xl [&>h1]:font-bold [&>h1]:leading-tight [&>h1]:tracking-tighter [&>h1]:mb-6 [&>h1]:drop-shadow-sm [&>p]:text-lg [&>p]:max-w-3xl [&>p]:mx-auto [&>p]:mb-8 [&>p]:drop-shadow-sm [&>p]:font-bold [&>p]:bg-black/40 [&>p]:backdrop-blur-sm [&>p]:px-4 [&>p]:py-2 [&>p]:rounded-lg"></div>
+
                     <div class="mx-auto px-4 sm:px-6">
                         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
                             <InertiaLink
@@ -104,17 +91,8 @@ const furtherLinks = ref([
                                 :href="link.route"
                                 v-animate-on-scroll
                                 class="group animate-on-scroll frosted-glass-card rounded-2xl p-6 text-center flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden no-underline leading-normal text-slate-600"
-                                :class="[
-                                    index === furtherLinks.length - 1 && furtherLinks.length % 2 === 1
-                                        ? 'col-span-2 md:col-span-2'
-                                        : ''
-                                ]"
                                 :style="{ 'transition-delay': `${index * 100}ms` }"
                             >
-                                <div class="absolute inset-0 bg-gradient-to-br from-sky-100/0 via-sky-100/0 to-sky-100/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                                <ArrowUpRight class="absolute top-4 right-4 w-5 h-5 text-sky-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                                 <div class="relative z-10 flex flex-col items-center">
                                     <div class="p-3 bg-sky-100 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
                                         <component :is="link.icon" class="w-7 h-7 text-sky-600" />

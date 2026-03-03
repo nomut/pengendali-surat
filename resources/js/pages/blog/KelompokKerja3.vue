@@ -1,15 +1,14 @@
 <script setup>
-import AppLayout from '@/layouts-blog/AppLayout.vue'; // Pastikan path ini sesuai
-import { ref } from 'vue';
-// Ikon yang relevan dengan tema Pangan, Sandang, dan Perumahan
-import { Bean, Shirt, Home } from 'lucide-vue-next'; 
-import imgPokja3Landscape from '@/assets/images/pokja3-landscape.png';
+import AppLayout from '@/layouts-blog/AppLayout.vue';
+import { computed } from 'vue';
+import imgPokjaLandscape from '@/assets/images/pokja3-landscape.png'
 
-defineProps({
+const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
+    page: Object,
 });
 
 const vAnimateOnScroll = {
@@ -32,10 +31,12 @@ const vAnimateOnScroll = {
     observer.observe(el);
   },
 };
+
+const subtitle = computed(() => props.page?.meta?.subtitle || '');
 </script>
 
 <template>
-    <InertiaHead title="Program Pokja III" />
+    <InertiaHead :title="page?.title || 'Program Pokja I'" />
 
     <AppLayout
         :can-login="canLogin"
@@ -46,15 +47,15 @@ const vAnimateOnScroll = {
         <main>
             <section
                 class="relative h-96 flex items-center justify-center text-center bg-cover bg-center"
-                :style="{ backgroundImage: `url(${imgPokja3Landscape})` }"
+                :style="{ backgroundImage: `url(${imgPokjaLandscape})` }"
             >
-                <div class="absolute inset-0 bg-black/60"></div> 
+                <div class="absolute inset-0 bg-black/60"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10 text-white">
                     <h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tighter mb-4 drop-shadow-md">
-                        Pokja III
+                        {{ page?.title || 'Pokja I' }}
                     </h1>
                     <p class="text-lg text-slate-200 max-w-3xl mx-auto drop-shadow-sm">
-                        Fokus pada Pangan, Sandang, Perumahan, dan Tata Laksana Rumah Tangga.
+                        {{ subtitle }}
                     </p>
                 </div>
                 <div class="custom-shape-divider-bottom-light">
@@ -68,53 +69,7 @@ const vAnimateOnScroll = {
                 <div class="container mx-auto px-4 sm:px-6">
                     <div class="max-w-4xl mx-auto">
                         <div v-animate-on-scroll class="animate-on-scroll frosted-glass-card rounded-2xl p-8 md:p-12">
-                            <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-6 text-center">PROGRAM POKJA III</h2>
-
-                            <div class="mb-10">
-                                <div class="flex items-center mb-4">
-                                    <div class="p-3 bg-green-100 rounded-full mr-4">
-                                        <Bean class="w-6 h-6 text-green-600" />
-                                    </div>
-                                    <h3 class="text-xl font-semibold text-slate-800">Program Pangan</h3>
-                                </div>
-                                <p class="text-slate-600 mb-4">Program ini dilaksanakan dengan cara:</p>
-                                <ul class="list-disc list-inside space-y-2 text-slate-600">
-                                    <li>Menggerakan Keluarga dalam pemenuhan kebutuhan pangan melalui halaman asri teratur indah dan nyaman.</li>
-                                    <li>Menggerakan Keluarga dalam percepatan keanekaragaman konsumsi pangan.</li>
-                                    <li>Menggerakan Keluarga mengkonsumsi makanan yang beragam, bergizi, seimbang dan aman.</li>
-                                    <li>Mendukung dan berperan serta dalam kegiatan penyediaan makanan tambahan.</li>
-                                </ul>
-                            </div>
-
-                            <div class="mb-10">
-                                <div class="flex items-center mb-4">
-                                    <div class="p-3 bg-sky-100 rounded-full mr-4">
-                                        <Shirt class="w-6 h-6 text-sky-600" />
-                                    </div>
-                                    <h3 class="text-xl font-semibold text-slate-800">Program Sandang</h3>
-                                </div>
-                                <p class="text-slate-600 mb-4">Program ini dilaksanakan dengan cara:</p>
-                                <ul class="list-disc list-inside space-y-2 text-slate-600">
-                                    <li>Membudayakan perilaku berbusana sesuai moral budaya Indonesia.</li>
-                                    <li>Memasyarakatkan pakaian adat pada acara tertentu.</li>
-                                    <li>Pengembangan pola pendampingan kepada usaha sandang kecil mikro.</li>
-                                </ul>
-                            </div>
-                            
-                            <div>
-                                <div class="flex items-center mb-4">
-                                    <div class="p-3 bg-orange-100 rounded-full mr-4">
-                                        <Home class="w-6 h-6 text-orange-600" />
-                                    </div>
-                                    <h3 class="text-xl font-semibold text-slate-800">Program Perumahan dan Tata Laksana Rumah Tangga</h3>
-                                </div>
-                                <p class="text-slate-600 mb-4">Program ini dilaksanakan dengan cara:</p>
-                                <ul class="list-disc list-inside space-y-2 text-slate-600">
-                                    <li>Memasyarakatkan pemanfaatan sumberdaya energi dan teknologi tepat guna.</li>
-                                    <li>Pembinaan rumah sehat layak huni.</li>
-                                    <li>Meningkatkan pengetahuan dan keterampilan tentang tatalaksana rumah tangga dalam harmonisasi kehidupan Keluarga.</li>
-                                </ul>
-                            </div>
+                            <div v-if="page?.content" v-html="page.content" class="prose prose-slate max-w-none [&>h2]:text-2xl [&>h2]:md:text-3xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mb-6 [&>h2]:text-center [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-slate-800 [&>h3]:mb-4 [&>p]:text-slate-600 [&>p]:mb-4 [&>ul]:list-disc [&>ul]:list-inside [&>ul]:space-y-2 [&>ul]:text-slate-600"></div>
                         </div>
                     </div>
                 </div>

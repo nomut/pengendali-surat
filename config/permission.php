@@ -201,30 +201,8 @@ return [
     ],
 
     'abilities' => [
-        'surat-masuk-index' => 'Surat Masuk', 
-        'surat-masuk-create' => 'Surat Masuk Create',
-        'surat-masuk-update' => 'Surat Masuk Update', 
-        'surat-masuk-delete' => 'Surat Masuk Delete',
-
-        'surat-keluar-index' => 'Surat Keluar',
-        'surat-keluar-create' => 'Surat Keluar Create',
-        'surat-keluar-update' => 'Surat Keluar Update', 
-        'surat-keluar-delete' => 'Surat Keluar Delete',
-
-        'surat-tugas-index' => 'Surat Tugas',
-        'surat-tugas-create' => 'Surat Tugas Create',
-        'surat-tugas-update' => 'Surat Tugas Update', 
-        'surat-tugas-delete' => 'Surat Tugas Delete',
-
-        'rapat-index' => 'Rapat',
-        'rapat-create' => 'Rapat Create',
-        'rapat-update' => 'Rapat Update', 
-        'rapat-delete' => 'Rapat Delete',
-
-        'peserta-rapat-index' => 'Peserta Rapat',
-        'peserta-rapat-create' => 'Peserta Rapat Create',
-        'peserta-rapat-update' => 'Peserta Rapat Update', 
-        'peserta-rapat-delete' => 'Peserta Rapat Delete',
+        'cms-index' => 'CMS Halaman',
+        'cms-update' => 'CMS Halaman Update',
 
         'user-index' => 'User',
         'user-create' => 'User Create',

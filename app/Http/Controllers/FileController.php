@@ -18,7 +18,7 @@ class FileController extends Controller
         ]);
 
         $uploadedFile = $request->file('file');
-        $path = $uploadedFile->store('attachments');
+        $path = $uploadedFile->store('attachments', 'public');
         
         $file = File::create([
             'path' => $path,
@@ -51,11 +51,11 @@ class FileController extends Controller
         }
 
         // Pastikan file ada di storage
-        if (!Storage::disk('local')->exists($file->path)) {
+        if (!Storage::disk('public')->exists($file->path)) {
             abort(404, 'File tidak ditemukan.');
         }
 
-        return Storage::disk('local')->download($file->path, $file->original_name);
+        return Storage::disk('public')->download($file->path, $file->original_name);
     }
 
     /**
@@ -64,7 +64,7 @@ class FileController extends Controller
     public function preview(File $file)
     {
 
-        if (!Storage::disk('local')->exists($file->path)) {
+        if (!Storage::disk('public')->exists($file->path)) {
             abort(404);
         }
 
@@ -72,6 +72,6 @@ class FileController extends Controller
             abort(400, 'Preview hanya tersedia untuk file gambar.');
         }
 
-        return Storage::disk('local')->response($file->path);
+        return Storage::disk('public')->response($file->path);
     }
 }
