@@ -14,6 +14,10 @@ Route::get('/', [GuestController::class, "home"])->name('home');
 Route::get('/kelompok-kerja/{kelompokKerja?}', [GuestController::class, "kelompokKerja"])->name('kelompok-kerja');
 Route::get('/profil-organisasi', [GuestController::class, "profilOrganisasi"])->name('profil-organisasi');
 Route::get('/struktur-organisasi', [GuestController::class, "strukturOrganisasi"])->name('struktur-organisasi');
+Route::get('/galeri', [App\Http\Controllers\GalleryController::class, "indexPublic"])->name('galeri');
+Route::get('/galeri/{gallery:slug}', [App\Http\Controllers\GalleryController::class, "showPublic"])->name('galeri.show');
+Route::get('/kegiatan', [App\Http\Controllers\ActivityController::class, "indexPublic"])->name('kegiatan');
+Route::get('/kegiatan/{activity:slug}', [App\Http\Controllers\ActivityController::class, "showPublic"])->name('kegiatan.show');
 
 // Public File Access for Images
 Route::get('/files/{file}/preview', [FileController::class, 'preview'])->name('files.preview');
@@ -41,6 +45,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('cms', [PageController::class, 'index'])->name('cms.index')->middleware('can:cms-index');
     Route::get('cms/{page}/edit', [PageController::class, 'edit'])->name('cms.edit')->middleware('can:cms-update');
     Route::put('cms/{page}', [PageController::class, 'update'])->name('cms.update')->middleware('can:cms-update');
+
+    // CMS - Galeri
+    Route::resource('galleries', App\Http\Controllers\GalleryController::class);
+
+    // CMS - Kegiatan
+    Route::resource('activities', App\Http\Controllers\ActivityController::class);
 
     // File Management
     Route::post('/files', [FileController::class, 'store'])->name('files.store');

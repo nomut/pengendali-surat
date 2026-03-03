@@ -50,7 +50,7 @@ const getImageUrl = (path) => {
         <main>
             <section
                 class="relative h-64 md:h-80 flex items-center justify-center text-center bg-cover bg-center"
-                :style="{ backgroundImage: `url(${homeBg})` }">
+                :style="{ backgroundImage: `url(${page?.meta?.main_image ? getImageUrl(page.meta.main_image) : homeBg})` }">
                 <div class="absolute inset-0 bg-black/60"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10 text-white">
                     <h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tighter mb-4 drop-shadow-md">

@@ -35,6 +35,11 @@ const vAnimateOnScroll = {
 
 const visi = computed(() => props.page?.meta?.visi || '');
 const misi = computed(() => props.page?.meta?.misi || '');
+
+const getImageUrl = (path) => {
+    if (!path) return null;
+    return `/storage/${path}`;
+};
 </script>
 
 <template>
@@ -49,7 +54,7 @@ const misi = computed(() => props.page?.meta?.misi || '');
         <main>
             <section
                 class="relative h-64 md:h-80 flex items-center justify-center text-center bg-cover bg-center"
-                :style="{ backgroundImage: `url(${homeBg})` }">
+                :style="{ backgroundImage: `url(${page?.meta?.main_image ? getImageUrl(page.meta.main_image) : homeBg})` }">
                 <div class="absolute inset-0 bg-black/60"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10 text-white">
                     <h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tighter mb-4 drop-shadow-md">
@@ -68,7 +73,7 @@ const misi = computed(() => props.page?.meta?.misi || '');
                             <div v-if="page?.content" v-html="page.content" class="prose prose-slate max-w-none [&>h2]:text-3xl [&>h2]:font-bold [&>h2]:text-slate-800 [&>h2]:mb-4 [&>p]:tracking-wide [&>p]:leading-normal [&>p]:text-slate-600"></div>
                         </div>
                         <div v-animate-on-scroll class="animate-on-scroll w-full h-80 rounded-2xl p-2 frosted-glass-card" style="transition-delay: 200ms">
-                            <img :src="homeBg" alt="Gedung bersejarah di Yogyakarta" class="w-full h-full object-cover rounded-xl shadow-lg">
+                            <img :src="page?.meta?.main_image ? getImageUrl(page.meta.main_image) : homeBg" alt="Gedung bersejarah di Yogyakarta" class="w-full h-full object-cover rounded-xl shadow-lg">
                         </div>
                     </div>
                 </div>

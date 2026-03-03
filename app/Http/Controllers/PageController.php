@@ -39,6 +39,18 @@ class PageController extends Controller
             'meta' => 'nullable|array',
         ]);
 
+        if (isset($validated['content'])) {
+            $validated['content'] = str_replace(['&amp;nbsp;', '&nbsp;'], ' ', $validated['content']);
+        }
+
+        if (isset($validated['meta'])) {
+            array_walk_recursive($validated['meta'], function(&$value) {
+                if (is_string($value)) {
+                    $value = str_replace(['&amp;nbsp;', '&nbsp;'], ' ', $value);
+                }
+            });
+        }
+
         $page->update($validated);
 
         return redirect()->route('cms.index')->with('success', 'Halaman berhasil diperbarui.');

@@ -29,6 +29,20 @@ export function useAppLayout() {
             visible: page.props.auth.permissions.includes('cms-index'),
         },
         {
+            label: 'Kegiatan',
+            lucideIcon: LayoutGrid,
+            route: route('activities.index'),
+            isActive: route().current('activities.*'),
+            visible: true,
+        },
+        {
+            label: 'Galeri',
+            lucideIcon: LayoutGrid, // You can use Image or Film if imported, I'll stick to a generic one or LayoutGrid since it's already there
+            route: route('galleries.index'),
+            isActive: route().current('galleries.*'),
+            visible: true,
+        },
+        {
             label: 'Pengguna',
             lucideIcon: Users,
             route: route('users.index'),

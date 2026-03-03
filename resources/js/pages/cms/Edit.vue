@@ -1,7 +1,9 @@
 <script setup>
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Link, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { Upload, Trash } from 'lucide-vue-next';
+import axios from 'axios';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Editor from 'primevue/editor';
@@ -41,6 +43,41 @@ const form = useForm({
     meta: props.page.meta || {},
 });
 
+const isUploadingMainImage = ref(false);
+
+const onMainImageSelect = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    isUploadingMainImage.value = true;
+    try {
+        const response = await axios.post(route('files.store'), formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        
+        form.meta.main_image = response.data.path;
+        toast.add({ severity: 'success', summary: 'Sukses', detail: 'Gambar Utama berhasil diunggah', life: 3000 });
+    } catch (err) {
+        toast.add({ severity: 'error', summary: 'Gagal', detail: 'Gagal mengunggah Gambar Utama', life: 3000 });
+        console.error(err);
+    } finally {
+        isUploadingMainImage.value = false;
+        event.target.value = '';
+    }
+};
+
+const removeMainImage = () => {
+    delete form.meta.main_image;
+};
+
+const getImageUrl = (path) => {
+    if (!path) return null;
+    return `/storage/${path}`;
+};
+
 const submitForm = () => {
     form.put(route('cms.update', props.page.id), {
         onSuccess: () => {
@@ -76,6 +113,33 @@ const submitForm = () => {
                                 <label for="content" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Konten Halaman</label>
                                 <Editor v-model="form.content" editorStyle="height: 400px" />
                                 <small v-if="form.errors.content" class="p-error">{{ form.errors.content }}</small>
+                            </div>
+
+                            <!-- Gambar Utama Section -->
+                            <div class="border border-slate-200 dark:border-slate-700 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Gambar Utama (Featured Image)</label>
+                                <div class="flex flex-col sm:flex-row gap-6">
+                                    <div class="w-full sm:w-64 h-40 bg-slate-200 dark:bg-slate-700 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600 flex items-center justify-center relative group shrink-0 shadow-inner">
+                                        <img v-if="form.meta.main_image" :src="getImageUrl(form.meta.main_image)" class="w-full h-full object-cover" />
+                                        <span v-else class="text-slate-400 dark:text-slate-500 text-sm">Belum ada gambar</span>
+                                        
+                                        <label class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer text-white z-10 w-full h-full">
+                                            <Upload class="w-6 h-6 mb-1" />
+                                            <span class="text-xs font-semibold ml-2" v-if="isUploadingMainImage">Mengunggah...</span>
+                                            <input :disabled="isUploadingMainImage" type="file" class="hidden" accept="image/*" @change="onMainImageSelect" />
+                                        </label>
+                                    </div>
+                                    <div class="flex flex-col justify-center gap-2">
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                                            Gambar ini akan digunakan sebagai banner utama di halaman publik.
+                                        </p>
+                                        <div v-if="form.meta.main_image">
+                                            <Button @click="removeMainImage" type="button" size="small" text severity="danger" class="p-0 text-xs">
+                                                <Trash class="w-4 h-4 mr-1" /> Hapus Gambar
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

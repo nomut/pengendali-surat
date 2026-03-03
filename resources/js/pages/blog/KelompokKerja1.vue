@@ -33,6 +33,11 @@ const vAnimateOnScroll = {
 };
 
 const subtitle = computed(() => props.page?.meta?.subtitle || '');
+
+const getImageUrl = (path) => {
+    if (!path) return null;
+    return `/storage/${path}`;
+};
 </script>
 
 <template>
@@ -47,7 +52,7 @@ const subtitle = computed(() => props.page?.meta?.subtitle || '');
         <main>
             <section
                 class="relative h-96 flex items-center justify-center text-center bg-cover bg-center"
-                :style="{ backgroundImage: `url(${imgPokja1Landscape})` }"
+                :style="{ backgroundImage: `url(${page?.meta?.main_image ? getImageUrl(page.meta.main_image) : imgPokja1Landscape})` }"
             >
                 <div class="absolute inset-0 bg-black/60"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10 text-white">

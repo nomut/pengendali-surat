@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\Activity;
+use App\Models\Gallery;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Foundation\Application;
@@ -13,10 +15,24 @@ class GuestController extends Controller
     {
         $page = Page::where('slug', 'home')->first();
 
+        $latestActivities = Activity::where('is_published', true)
+            ->orderBy('date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        $latestGalleries = Gallery::where('is_published', true)
+            ->orderBy('date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
         return Inertia::render('blog/Home', [
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
             'page' => $page,
+            'latestActivities' => $latestActivities,
+            'latestGalleries' => $latestGalleries,
         ]);
     }
 
@@ -55,6 +71,23 @@ class GuestController extends Controller
         $page = Page::where('slug', 'profil-organisasi')->first();
 
         return Inertia::render('blog/ProfilOrganisasi', [
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+            'page' => $page,
+        ]);
+    }
+
+    public function galeri()
+    {
+        // First try to get the galeri page. If it doesn't exist yet, we'll create a dummy empty page
+        $page = Page::where('slug', 'galeri')->first();
+        if (!$page) {
+            $page = new Page();
+            $page->title = 'Galeri Kegiatan';
+            $page->meta = ['galleries' => []];
+        }
+
+        return Inertia::render('blog/Galeri', [
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
             'page' => $page,
