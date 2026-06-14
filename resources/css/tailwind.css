@@ -3,6 +3,8 @@
 @import 'tailwindcss/utilities.css' layer(tailwind-utilities);
 @import 'tailwindcss-primeui';
 
+@plugin '@tailwindcss/typography';
+
 @source '../../storage/framework/views/*.php';
 @source '../../resources/views/**/*.blade.php';
 @source '../../resources/js/**/*.vue';

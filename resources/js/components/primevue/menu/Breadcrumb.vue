@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue';
 import Breadcrumb, { type BreadcrumbPassThroughOptions, type BreadcrumbProps } from 'primevue/breadcrumb';
-import { ChevronRight } from 'lucide-vue-next';
+import { ChevronRight, House } from 'lucide-vue-next';
 import type { MenuItem } from '@/types';
 import { ptViewMerge } from '@/utils';
 
@@ -10,8 +10,12 @@ interface ExtendedBreadcrumbProps extends Omit<BreadcrumbProps, 'model'> {
 }
 const componentProps = defineProps<ExtendedBreadcrumbProps>();
 
+// Rute beranda, dipakai untuk menandai crumb pertama dengan ikon rumah
+const homeRoute = route('dashboard');
+
 const defaultPt = ref<BreadcrumbPassThroughOptions>({
-    root: 'p-0 bg-transparent'
+    root: 'p-0 bg-transparent text-sm',
+    separator: 'mx-1 text-muted-color',
 });
 
 type BreadcrumbType = InstanceType<typeof Breadcrumb>;
@@ -29,30 +33,35 @@ defineExpose({ $el: childRef });
                 v-if="item.visible !== false && item.route"
                 :href="item.route"
                 :target="item.target"
-                :class="['p-breadcrumb-item-link', item.class]"
+                :class="[
+                    'inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 no-underline text-muted-color hover:text-color hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors',
+                    item.class,
+                ]"
                 :style="item.style"
                 :aria-disabled="item.disabled === true"
                 custom
             >
+                <House
+                    v-if="item.route === homeRoute"
+                    class="size-3.5 shrink-0"
+                />
                 <i
-                    v-if="item.icon"
+                    v-else-if="item.icon"
                     :class="['p-breadcrumb-item-icon', item.icon]"
                 />
                 <component
                     :is="item.lucideIcon"
                     v-else-if="item.lucideIcon"
-                    :class="['p-breadcrumb-item-icon', item.lucideIconClass]"
+                    :class="['size-3.5 shrink-0', item.lucideIconClass]"
                 />
-                <span class="p-breadcrumb-item-label">{{ item.label }}</span>
+                <span>{{ item.label }}</span>
             </InertiaLink>
-            <a
+            <span
                 v-else-if="item.visible !== false"
                 v-bind="props.action"
-                :href="item.url"
-                :target="item.target"
-                :class="item.class"
+                :class="['inline-flex items-center gap-1.5 px-1.5 py-1 font-semibold text-color', item.class]"
                 :style="item.style"
-                :aria-disabled="item.disabled === true"
+                :aria-current="'page'"
             >
                 <i
                     v-if="item.icon"
@@ -61,13 +70,13 @@ defineExpose({ $el: childRef });
                 <component
                     :is="item.lucideIcon"
                     v-else-if="item.lucideIcon"
-                    :class="['p-breadcrumb-item-icon', item.lucideIconClass]"
+                    :class="['size-3.5 shrink-0', item.lucideIconClass]"
                 />
-                <span class="p-breadcrumb-item-label">{{ item.label }}</span>
-            </a>
+                <span>{{ item.label }}</span>
+            </span>
         </template>
         <template #separator>
-            <ChevronRight />
+            <ChevronRight class="size-3.5" />
         </template>
     </Breadcrumb>
 </template>

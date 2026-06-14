@@ -16,17 +16,45 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('users/Index', [
-            'users' => User::paginate(10)->through(fn ($user) => [
+        $users = User::query()
+            ->when($request->input('name'),
+                fn ($query, $val) => $query->where('name', 'like', "%{$val}%")
+            )
+            ->when($request->input('email'),
+                fn ($query, $val) => $query->where('email', 'like', "%{$val}%")
+            )
+            ->when($request->input('role'),
+                fn ($query, $val) => $query->whereHas('roles', fn ($q) => $q->where('name', $val))
+            )
+            ->when($request->input('sortField'), function ($query, $sortField) use ($request) {
+                $sortOrder = $request->input('sortOrder') == -1 ? 'desc' : 'asc';
+                $query->orderBy($sortField, $sortOrder);
+            }, function ($query) {
+                $query->latest();
+            })
+            ->paginate((int) $request->input('per_page', 10))
+            ->withQueryString()
+            ->through(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'created_at' => $user->created_at,
                 'role_name' => $user->role_name,
                 'role_id' => $user->role_id,
-            ]),
+            ]);
+
+        $filters = $request->only(['name', 'email', 'role', 'sortField', 'sortOrder', 'per_page']);
+
+        if (isset($filters['sortOrder'])) {
+            $filters['sortOrder'] = (int) $filters['sortOrder'];
+        }
+
+        return Inertia::render('users/Index', [
+            'users' => $users,
+            'filters' => $filters,
+            'roles' => Role::orderBy('name')->pluck('name'),
         ]);
     }
 
@@ -58,7 +86,7 @@ class UserController extends Controller
         
         $user->assignRole([$request->role_id]);
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Pengguna baru berhasil dibuat.');
     }
 
     /**
@@ -103,7 +131,7 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Data pengguna berhasil diperbarui.');
     }
 
     public function destroy(User $user)
@@ -118,7 +146,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Data pengguna berhasil dihapus.');
     }
     
 }

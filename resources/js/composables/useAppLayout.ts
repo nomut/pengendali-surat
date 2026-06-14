@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { usePage, useForm } from '@inertiajs/vue3';
-import { LayoutGrid, Info, Settings, LogOut, FileSearch, Users } from 'lucide-vue-next';
+import { LayoutGrid, Settings, LogOut, FileSearch, Users } from 'lucide-vue-next';
 import { MenuItem } from '@/types';
 
 export function useAppLayout() {
@@ -14,53 +14,46 @@ export function useAppLayout() {
     });
 
     // Menu items
+    const isCurrentRoute = (pattern: string) => {
+        // Access currentRoute to trigger re-computation on navigation.
+        void currentRoute.value;
+        return route().current(pattern) ?? false;
+    };
     const menuItems = computed<MenuItem[]>(() => [
         {
             label: 'Beranda',
             lucideIcon: LayoutGrid,
             route: route('dashboard'),
-            active: currentRoute.value == 'dashboard',
+            active: isCurrentRoute('dashboard'),
         },
         {
             label: 'CMS Halaman',
             lucideIcon: FileSearch,
             route: route('cms.index'),
-            isActive: route().current('cms.*'),
+            active: isCurrentRoute('cms.*'),
             visible: page.props.auth.permissions.includes('cms-index'),
         },
         {
             label: 'Kegiatan',
             lucideIcon: LayoutGrid,
             route: route('activities.index'),
-            isActive: route().current('activities.*'),
-            visible: true,
+            active: isCurrentRoute('activities.*'),
+            visible: page.props.auth.permissions.includes('activity-index'),
         },
         {
             label: 'Galeri',
-            lucideIcon: LayoutGrid, // You can use Image or Film if imported, I'll stick to a generic one or LayoutGrid since it's already there
+            lucideIcon: LayoutGrid,
             route: route('galleries.index'),
-            isActive: route().current('galleries.*'),
+            active: isCurrentRoute('galleries.*'),
             visible: true,
         },
         {
             label: 'Pengguna',
             lucideIcon: Users,
             route: route('users.index'),
-            active: currentRoute.value == 'users',
+            active: isCurrentRoute('users.*'),
             visible: page.props.auth.permissions.includes('user-index'),
         },
-        // {
-        //     label: '#',
-        //     lucideIcon: Info,
-        //     items: [
-        //         {
-        //             label: 'Starter Kit Docs',
-        //             url: 'https://connorabbas.github.io/laravel-primevue-starter-kit-docs/',
-        //             target: '_blank',
-        //             lucideIcon: FileSearch,
-        //         },
-        //     ],
-        // },
     ]);
 
     // User menu and logout functionality.

@@ -65,11 +65,13 @@ const onPageChange = (event) => {
             <section
                 class="relative h-64 md:h-80 flex items-center justify-center text-center bg-cover bg-center"
                 :style="{ backgroundImage: `url(${homeBg})` }">
-                <div class="absolute inset-0 bg-black/60"></div>
+                <div class="absolute inset-0 bg-linear-to-b from-slate-900/70 via-slate-900/45 to-slate-900/70"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10 text-white">
+                    <span class="inline-block mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-sky-300">Dokumentasi</span>
                     <h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tighter mb-4 drop-shadow-md">
                         Galeri Kegiatan
                     </h1>
+                    <div class="mx-auto mb-6 h-1 w-20 rounded-full bg-linear-to-r from-sky-400 to-cyan-300"></div>
                     <p class="text-lg text-slate-200 max-w-3xl mx-auto drop-shadow-sm">
                         Kumpulan dokumentasi visual dari berbagai program dan kegiatan penggerak kesejahteraan keluarga (PKK) DIY.
                     </p>
@@ -89,13 +91,13 @@ const onPageChange = (event) => {
                             
                             <!-- Gallery Card -->
                             <div v-for="(gallery, index) in galleries.data" :key="gallery.id" 
-                                v-animate-on-scroll class="animate-on-scroll group bg-white/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-white flex flex-col h-full"
+                                v-animate-on-scroll class="animate-on-scroll group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-sky-900/10 transition-all duration-300 border border-slate-200/70 hover:-translate-y-1.5 flex flex-col h-full"
                                 :style="{ transitionDelay: `${index * 50}ms` }">
                                 
                                 <InertiaLink :href="route('galeri.show', gallery.slug)" class="block aspect-video relative overflow-hidden">
                                     <img :src="getCoverImage(gallery.images)" :alt="gallery.title" 
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <div class="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     
                                     <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm text-sky-800 text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
                                         Lihat {{ gallery.images?.length || 0 }} Foto <ArrowRight class="w-3 h-3" />

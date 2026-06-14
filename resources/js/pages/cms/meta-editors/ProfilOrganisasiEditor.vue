@@ -22,25 +22,27 @@ const updateMisi = (value) => {
 <template>
     <div class="flex flex-col gap-6">
         <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Visi</label>
+            <label class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Visi</label>
             <Textarea
                 :model-value="modelValue.visi"
                 @update:model-value="updateVisi"
                 rows="3"
-                class="w-full"
+                size="small"
+                fluid
             />
-            <small class="text-slate-500">Visi dari organisasi PKK DIY.</small>
+            <small class="block text-xs text-muted-color mt-1">Visi dari organisasi PKK DIY.</small>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Misi</label>
+            <label class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Misi</label>
             <Textarea
                 :model-value="modelValue.misi"
                 @update:model-value="updateMisi"
                 rows="5"
-                class="w-full"
+                size="small"
+                fluid
             />
-            <small class="text-slate-500">Misi dari organisasi PKK DIY.</small>
+            <small class="block text-xs text-muted-color mt-1">Misi dari organisasi PKK DIY.</small>
         </div>
     </div>
 </template>

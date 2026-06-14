@@ -2,7 +2,7 @@
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
-import { Plus, Trash, Upload, X } from 'lucide-vue-next';
+import { Plus, Trash, Upload } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import axios from 'axios';
@@ -54,7 +54,7 @@ const onFileSelect = async (event, index) => {
         const response = await axios.post(route('files.store'), formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
-        
+
         updateItem(index, 'foto_path', response.data.path);
         toast.add({ severity: 'success', summary: 'Sukses', detail: 'Foto berhasil diunggah', life: 3000 });
     } catch (err) {
@@ -81,37 +81,37 @@ const getImageUrl = (path) => {
 <template>
     <div>
         <div class="flex justify-between items-center mb-4">
-            <h4 class="font-semibold text-slate-800">Daftar Kelompok Kerja</h4>
-            <Button @click="addItem" size="small" class="p-button-outlined">
+            <h4 class="font-semibold text-color">Daftar Kelompok Kerja</h4>
+            <Button @click="addItem" size="small" outlined>
                 <Plus class="w-4 h-4 mr-2" /> Tambah Kelompok Kerja
             </Button>
         </div>
 
-        <div v-if="initKelompokKerja().length === 0" class="text-center p-6 bg-slate-50 rounded-lg text-slate-500 border border-slate-200">
+        <div v-if="initKelompokKerja().length === 0" class="text-center p-6 rounded-lg border dynamic-border bg-surface-50 dark:bg-surface-800/50 text-muted-color">
             Belum ada kelompok kerja.
         </div>
 
-        <div class="space-y-4">
-            <div v-for="(item, index) in initKelompokKerja()" :key="index" class="p-4 border border-slate-200 rounded-lg bg-slate-50 relative group">
-                <Button 
-                    @click="removeItem(index)" 
-                    severity="danger" 
-                    text 
-                    rounded 
+        <div class="flex flex-col gap-4">
+            <div v-for="(item, index) in initKelompokKerja()" :key="index" class="p-4 rounded-lg border dynamic-border bg-surface-50 dark:bg-surface-800/50 relative group">
+                <Button
+                    @click="removeItem(index)"
+                    severity="danger"
+                    text
+                    rounded
                     class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                     v-tooltip.top="'Hapus'"
                 >
                     <Trash class="w-4 h-4" />
                 </Button>
-                
+
                 <div class="flex flex-col sm:flex-row gap-6">
                     <!-- IMAGE UPLOAD -->
                     <div class="flex flex-col items-center gap-2">
-                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide">Gambar</label>
-                        <div class="w-32 h-24 bg-slate-200 rounded-lg overflow-hidden border border-slate-300 flex items-center justify-center relative group shrink-0 shadow-inner">
+                        <label class="block text-xs font-medium text-surface-700 dark:text-surface-300">Gambar</label>
+                        <div class="w-32 h-24 bg-surface-100 dark:bg-surface-800 rounded-lg overflow-hidden border dynamic-border flex items-center justify-center relative group shrink-0 shadow-inner">
                             <img v-if="item.foto_path" :src="getImageUrl(item.foto_path)" class="w-full h-full object-cover" />
-                            <span v-else class="text-slate-400 text-sm">Upload</span>
-                            
+                            <span v-else class="text-muted-color text-sm">Upload</span>
+
                             <label class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer text-white z-10 w-full h-full">
                                 <Upload class="w-5 h-5" />
                                 <input type="file" class="hidden" accept="image/*" @change="e => onFileSelect(e, index)" />
@@ -123,22 +123,24 @@ const getImageUrl = (path) => {
                     <!-- DATA -->
                     <div class="flex-1 flex flex-col gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-wide">Judul</label>
-                            <InputText 
+                            <label class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Judul</label>
+                            <InputText
                                 :model-value="item.title"
                                 @update:model-value="(val) => updateItem(index, 'title', val)"
-                                class="w-full" 
-                                placeholder="Contoh: Pembinaan Karakter Keluarga" 
+                                placeholder="Contoh: Pembinaan Karakter Keluarga"
+                                size="small"
+                                fluid
                             />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1 uppercase tracking-wide">Deskripsi</label>
-                            <Textarea 
+                            <label class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Deskripsi</label>
+                            <Textarea
                                 :model-value="item.description"
                                 @update:model-value="(val) => updateItem(index, 'description', val)"
-                                class="w-full" 
-                                rows="3" 
-                                placeholder="Penjelasan deskripsi kelompok kerja..." 
+                                rows="3"
+                                placeholder="Penjelasan deskripsi kelompok kerja..."
+                                size="small"
+                                fluid
                             />
                         </div>
                     </div>

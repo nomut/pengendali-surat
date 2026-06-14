@@ -64,7 +64,7 @@ const openPreview = (imagePath) => {
             <section
                 class="relative h-[40vh] md:h-[50vh] flex items-end pb-12 justify-center text-center bg-cover bg-center"
                 :style="{ backgroundImage: `url(${getCoverImage()})` }">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10 text-white w-full max-w-5xl">
                     <InertiaLink :href="route('galeri')" class="inline-flex items-center text-sky-300 hover:text-white mb-6 transition-colors font-medium backdrop-blur-sm bg-black/20 px-4 py-2 rounded-full text-sm">
                         <ArrowLeft class="w-4 h-4 mr-2" /> Kembali ke Indeks Galeri

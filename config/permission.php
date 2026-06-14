@@ -200,18 +200,34 @@ return [
         'store' => 'default',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Hak Akses (Abilities)
+    |--------------------------------------------------------------------------
+    |
+    | Setiap key adalah nama permission yang dipakai pada middleware route dan
+    | disimpan di database — JANGAN diubah agar role & otorisasi tidak rusak.
+    | Nilai 'module' & 'action' hanya untuk tampilan pada layar kelola Peran,
+    | sehingga selaras dengan nama modul terkini.
+    |
+    */
     'abilities' => [
-        'cms-index' => 'CMS Halaman',
-        'cms-update' => 'CMS Halaman Update',
+        'cms-index' => ['module' => 'CMS Halaman', 'action' => 'Lihat'],
+        'cms-update' => ['module' => 'CMS Halaman', 'action' => 'Ubah'],
 
-        'user-index' => 'User',
-        'user-create' => 'User Create',
-        'user-update' => 'User Update', 
-        'user-delete' => 'User Delete',
+        'activity-index' => ['module' => 'Kegiatan', 'action' => 'Lihat'],
+        'activity-create' => ['module' => 'Kegiatan', 'action' => 'Buat'],
+        'activity-update' => ['module' => 'Kegiatan', 'action' => 'Ubah'],
+        'activity-delete' => ['module' => 'Kegiatan', 'action' => 'Hapus'],
 
-        'user-role-index' => 'User Role',
-        'user-role-create' => 'User Role Create',
-        'user-role-update' => 'User Role Update', 
-        'user-role-delete' => 'User Role Delete',
-    ]
+        'user-index' => ['module' => 'Pengguna', 'action' => 'Lihat'],
+        'user-create' => ['module' => 'Pengguna', 'action' => 'Buat'],
+        'user-update' => ['module' => 'Pengguna', 'action' => 'Ubah'],
+        'user-delete' => ['module' => 'Pengguna', 'action' => 'Hapus'],
+
+        'user-role-index' => ['module' => 'Peran', 'action' => 'Lihat'],
+        'user-role-create' => ['module' => 'Peran', 'action' => 'Buat'],
+        'user-role-update' => ['module' => 'Peran', 'action' => 'Ubah'],
+        'user-role-delete' => ['module' => 'Peran', 'action' => 'Hapus'],
+    ],
 ];

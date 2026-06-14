@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { Head, Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import InputGroup from 'primevue/inputgroup';
 import InputText from 'primevue/inputtext';
@@ -16,6 +16,7 @@ const props = defineProps({
     filters: Object,
 });
 
+const permissions = usePage().props.auth.permissions;
 const search = ref(props.filters.search || '');
 
 let debounceTimeout = null;
@@ -60,7 +61,7 @@ const onPageChange = (event) => {
             <h2 class="font-semibold text-xl text-slate-800 dark:text-slate-200 leading-tight">
                 Kegiatan
             </h2>
-            <Link :href="route('activities.create')">
+            <Link v-if="permissions.includes('activity-create')" :href="route('activities.create')">
                 <Button>
                     <Plus class="w-4 h-4 mr-2" /> Tambah Kegiatan
                 </Button>
@@ -131,12 +132,12 @@ const onPageChange = (event) => {
                     <Column :exportable="false" style="min-width:8rem" alignFrozen="right" :frozen="true">
                         <template #body="{ data }">
                             <div class="flex gap-2 justify-end">
-                                <Link :href="route('activities.edit', data.id)">
+                                <Link v-if="permissions.includes('activity-update')" :href="route('activities.edit', data.id)">
                                     <Button outlined rounded size="small" class="!w-8 !h-8 !p-0" v-tooltip.top="'Edit'">
                                         <Edit2 class="w-4 h-4" />
                                     </Button>
                                 </Link>
-                                <Button @click="deleteActivity(data)" outlined rounded severity="danger" size="small" class="!w-8 !h-8 !p-0" v-tooltip.top="'Hapus'">
+                                <Button v-if="permissions.includes('activity-delete')" @click="deleteActivity(data)" outlined rounded severity="danger" size="small" class="!w-8 !h-8 !p-0" v-tooltip.top="'Hapus'">
                                     <Trash2 class="w-4 h-4" />
                                 </Button>
                             </div>

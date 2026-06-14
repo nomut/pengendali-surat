@@ -25,31 +25,32 @@ const shareArticle = () => {
     <AppLayout>
         <Head :title="activity.title" />
 
-        <article class="py-12 bg-white dark:bg-slate-900 min-h-screen">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <article class="py-12 min-h-screen">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <!-- Back Navigation -->
                 <div class="mb-8">
                     <Link :href="route('kegiatan')">
-                        <Button text class="!px-0 !text-slate-500 hover:!text-slate-900 dark:hover:!text-white group">
+                        <Button text class="!px-0 !text-slate-500 hover:!text-slate-900 group">
                             <ArrowLeft class="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" /> 
                             <span class="font-medium">Kembali ke Kegiatan Terbaru</span>
                         </Button>
                     </Link>
                 </div>
 
+                <div class="frosted-glass-card rounded-2xl p-6 sm:p-8 md:p-10">
                 <!-- Article Header -->
                 <header class="mb-10 text-center sm:text-left">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-6">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-6">
                         {{ activity.title }}
                     </h1>
                     
-                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 text-sm font-medium text-slate-500 dark:text-slate-400">
-                        <div v-if="activity.date" class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
+                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6 text-sm font-medium text-slate-500">
+                        <div v-if="activity.date" class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full">
                             <Calendar class="w-4 h-4 text-sky-500" />
                             {{ new Date(activity.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}
                         </div>
-                        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
+                        <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full">
                             <Eye class="w-4 h-4 text-emerald-500" />
                             {{ activity.views }} x dibaca
                         </div>
@@ -60,7 +61,7 @@ const shareArticle = () => {
                 </header>
 
                 <!-- Cover Image (If Any) -->
-                <div v-if="activity.cover_image" class="mb-12 rounded-2xl overflow-hidden shadow-lg border border-slate-100 dark:border-slate-800 aspect-video">
+                <div v-if="activity.cover_image" class="mb-12 rounded-2xl overflow-hidden shadow-lg border border-slate-100 aspect-video">
                     <img 
                         :src="getImageUrl(activity.cover_image)" 
                         :alt="activity.title"
@@ -69,11 +70,12 @@ const shareArticle = () => {
                 </div>
 
                 <!-- Article Content -->
-                <div class="prose prose-lg dark:prose-invert prose-sky max-w-none prose-img:rounded-xl prose-img:shadow-md">
+                <div class="prose prose-lg prose-sky max-w-none wrap-break-word prose-img:rounded-xl prose-img:shadow-md prose-headings:wrap-break-word prose-p:wrap-break-word">
                     <div v-if="activity.content" v-html="activity.content"></div>
                     <div v-else class="text-center italic text-slate-500 my-12">
                         Belum ada konten artikel untuk kegiatan ini.
                     </div>
+                </div>
                 </div>
 
             </div>

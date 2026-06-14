@@ -20,7 +20,7 @@ import Container from '@/components/Container.vue';
 import PageTitleSection from '@/components/PageTitleSection.vue';
 
 import { useSiteColorMode } from '@/composables/useSiteColorMode';
-import themePreset from '@/theme/noir-preset';
+import themePreset from '@/theme/pkk-preset';
 import globalPt from '@/theme/global-pt';
 
 /* global Ziggy */

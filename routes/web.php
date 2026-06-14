@@ -50,7 +50,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('galleries', App\Http\Controllers\GalleryController::class);
 
     // CMS - Kegiatan
-    Route::resource('activities', App\Http\Controllers\ActivityController::class);
+    Route::get('activities', [App\Http\Controllers\ActivityController::class, 'index'])->name('activities.index')->middleware('can:activity-index');
+    Route::get('activities/create', [App\Http\Controllers\ActivityController::class, 'create'])->name('activities.create')->middleware('can:activity-create');
+    Route::post('activities', [App\Http\Controllers\ActivityController::class, 'store'])->name('activities.store')->middleware('can:activity-create');
+    Route::get('activities/{activity}/edit', [App\Http\Controllers\ActivityController::class, 'edit'])->name('activities.edit')->middleware('can:activity-update');
+    Route::put('activities/{activity}', [App\Http\Controllers\ActivityController::class, 'update'])->name('activities.update')->middleware('can:activity-update');
+    Route::delete('activities/{activity}', [App\Http\Controllers\ActivityController::class, 'destroy'])->name('activities.destroy')->middleware('can:activity-delete');
 
     // File Management
     Route::post('/files', [FileController::class, 'store'])->name('files.store');

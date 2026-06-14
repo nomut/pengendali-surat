@@ -28,7 +28,12 @@ class DatabaseSeeder extends Seeder
         ]);
         $user->assignRole($role);
 
-        $this->call(PageSeeder::class);
+        $this->call([
+            PageSeeder::class,
+            CmsPageSeeder::class,
+            ActivitySeeder::class,
+            GallerySeeder::class,
+        ]);
     }
 
     private function createPermissions($abilities) : void

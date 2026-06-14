@@ -15,7 +15,7 @@ class PageSeeder extends Seeder
                 'title' => 'Beranda',
                 'content' => '<h1>PKK DIY Teguhkan Komitmen Menuju Indonesia Emas</h1>
 <p>Terwujudnya Keluarga Beriman dan Bertaqwa kepada Tuhan Yang Maha Esa, Berakhlak Mulia, dan Berbudi Luhur, Sehat, Sejahtera, Maju, Mandiri, Kesetaraan dan Keadilan Gender, serta Kesadaran Hukum dan Lingkungan.</p>',
-                'meta' => json_encode([
+                'meta' => [
                     'kelompok_kerja' => [
                         [
                             'title' => 'Pembinaan Karakter Keluarga',
@@ -34,7 +34,7 @@ class PageSeeder extends Seeder
                             'description' => 'Kesehatan Keluarga dan Lingkungan berkomitmen meningkatkan kualitas hidup masyarakat dengan mendorong perilaku hidup bersih dan sehat. Programnya mencakup edukasi gizi, kesehatan ibu dan anak, pencegahan penyakit, serta pengelolaan lingkungan yang bersih dan ramah.',
                         ],
                     ],
-                ]),
+                ],
             ],
             [
                 'slug' => 'profil-organisasi',
@@ -42,16 +42,16 @@ class PageSeeder extends Seeder
                 'content' => '<h2>Sejarah Singkat</h2>
 <p>Gerakan Pemberdayaan dan Kesejahteraan Keluarga (PKK) sebagai gerakan pembangunan masyarakat bermula dari seminar Home Economic di Bogor pada tahun 1957. Sebagai tindak lanjut dari seminar tersebut, pada tahun 1961 panitia penyusunan tata susunan pelajaran pada Pendidikan Kesejahteraan Keluarga (PKK) Kementerian Pendidikan.</p>
 <p>Di Daerah Istimewa Yogyakarta, gerakan ini telah menjadi tulang punggung dalam upaya peningkatan kualitas hidup keluarga, adaptif terhadap perubahan zaman, dan terus berinovasi untuk memberdayakan perempuan dan masyarakat secara luas.</p>',
-                'meta' => json_encode([
+                'meta' => [
                     'visi' => 'Terwujudnya keluarga yang beriman dan bertaqwa kepada Tuhan Yang Maha Esa, berakhlak mulia dan berbudi luhur, sehat sejahtera, maju dan mandiri, kesetaraan dan keadilan gender serta kesadaran hukum dan lingkungan.',
                     'misi' => 'Meningkatkan kualitas sumber daya manusia, memperkuat ketahanan ekonomi keluarga, serta melestarikan lingkungan hidup sambil meningkatkan kesadaran hukum dan partisipasi masyarakat.',
-                ]),
+                ],
             ],
             [
                 'slug' => 'struktur-organisasi',
                 'title' => 'Struktur Organisasi',
                 'content' => '<p>Tim Penggerak Pemberdayaan dan Kesejahteraan Keluarga Daerah Istimewa Yogyakarta.</p>',
-                'meta' => json_encode([
+                'meta' => [
                     'ketua_dan_wakil' => [
                         ['nama' => 'GUSTI KANJENG RATU HEMAS', 'jabatan' => 'KETUA TP PKK'],
                         ['nama' => 'GKBRAA PAKU ALAM', 'jabatan' => 'WAKIL KETUA TP PKK'],
@@ -112,7 +112,7 @@ class PageSeeder extends Seeder
                             ],
                         ],
                     ],
-                ]),
+                ],
             ],
             [
                 'slug' => 'pokja-1',
@@ -143,9 +143,9 @@ class PageSeeder extends Seeder
 <li>Pencegahan praktek perdagangan manusia.</li>
 <li>Pembinaan keluarga Indonesia bebas narkoba.</li>
 </ul>',
-                'meta' => json_encode([
+                'meta' => [
                     'subtitle' => 'Fokus pada Penghayatan dan Pengamalan Pancasila serta Gotong Royong.',
-                ]),
+                ],
             ],
             [
                 'slug' => 'pokja-2',
@@ -155,9 +155,9 @@ class PageSeeder extends Seeder
 <p>Meningkatkan kualitas pendidikan nonformal dan keterampilan keluarga untuk mendukung kemandirian ekonomi.</p>
 <h3>Program Pengembangan Kehidupan Berkoperasi</h3>
 <p>Mendorong terbentuknya koperasi dan usaha kecil yang mandiri berbasis keluarga.</p>',
-                'meta' => json_encode([
+                'meta' => [
                     'subtitle' => 'Fokus pada Pendidikan dan Keterampilan serta Pengembangan Kehidupan Berkoperasi.',
-                ]),
+                ],
             ],
             [
                 'slug' => 'pokja-3',
@@ -169,9 +169,9 @@ class PageSeeder extends Seeder
 <p>Mendorong pengembangan industri sandang rumahan dan pelestarian budaya berpakaian.</p>
 <h3>Program Perumahan Dan Tata Laksana Rumah Tangga</h3>
 <p>Pembinaan keluarga dalam penataan dan pemeliharaan rumah tangga yang sehat dan nyaman.</p>',
-                'meta' => json_encode([
+                'meta' => [
                     'subtitle' => 'Fokus pada Pangan, Sandang, dan Perumahan serta Tata Laksana Rumah Tangga.',
-                ]),
+                ],
             ],
             [
                 'slug' => 'pokja-4',
@@ -183,9 +183,9 @@ class PageSeeder extends Seeder
 <p>Mendorong kesadaran keluarga dalam pengelolaan sampah, penghijauan, dan pelestarian lingkungan hidup.</p>
 <h3>Program Perencanaan Sehat</h3>
 <p>Pembinaan keluarga berencana dan kesehatan reproduksi.</p>',
-                'meta' => json_encode([
+                'meta' => [
                     'subtitle' => 'Fokus pada Kesehatan, Kelestarian Lingkungan Hidup, dan Perencanaan Sehat.',
-                ]),
+                ],
             ],
         ];
 

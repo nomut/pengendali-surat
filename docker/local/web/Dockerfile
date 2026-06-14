@@ -1,6 +1,7 @@
 FROM php:8.4-fpm-alpine
 
 ARG WWWGROUP=1000
+ARG WWWUSER=1337
 
 ENV TZ=UTC
 
@@ -44,10 +45,10 @@ RUN curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/
 # pnpm
 RUN npm install -g pnpm
 
-# Adjust www-data to match host group
+# Adjust www-data to match host user/group (UID/GID configurable via build args)
 RUN delgroup www-data 2>/dev/null; \
     addgroup -g $WWWGROUP www-data && \
-    adduser -D -u 1337 -G www-data www-data 2>/dev/null || true
+    adduser -D -u $WWWUSER -G www-data www-data 2>/dev/null || true
 
 WORKDIR /var/www/html
 

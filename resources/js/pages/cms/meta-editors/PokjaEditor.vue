@@ -18,12 +18,13 @@ const updateSubtitle = (value) => {
 <template>
     <div class="flex flex-col gap-6">
         <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Subtitle (Keterangan di bawah Judul)</label>
+            <label class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Subtitle (Keterangan di bawah Judul)</label>
             <InputText
                 :model-value="modelValue ? modelValue.subtitle : ''"
                 @update:model-value="updateSubtitle"
-                class="w-full"
                 placeholder="Masukkan subtitle Pokja..."
+                size="small"
+                fluid
             />
         </div>
     </div>

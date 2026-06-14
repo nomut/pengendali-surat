@@ -132,12 +132,35 @@ header a:visited svg {
     text-decoration: none;
 }
 
-header a:visited span {
-    color:#0d76b6;
+/* Warna seragam untuk semua item menu (utama maupun dropdown) di segala state */
+header a span,
+header a:visited span,
+header a svg,
+header a:visited svg {
+    color: #0d76b6;
 }
 
-header a:visited svg {
-    color:#0d76b6;
+/* Hover / fokus keyboard / dropdown terbuka -> latar biru, teks putih */
+header .p-menubar-item-content:hover,
+header .p-menubar-item.p-focus > .p-menubar-item-content,
+header .p-menubar-item-active > .p-menubar-item-content {
+    background-color: #0d76b6 !important;
+}
+
+header .p-menubar-item-content:hover a span,
+header .p-menubar-item-content:hover a svg,
+header .p-menubar-item.p-focus > .p-menubar-item-content a span,
+header .p-menubar-item.p-focus > .p-menubar-item-content a svg,
+header .p-menubar-item-active > .p-menubar-item-content a span,
+header .p-menubar-item-active > .p-menubar-item-content a svg {
+    color: #ffffff !important;
+}
+
+/* Panel dropdown tetap terang dan teksnya seragam biru */
+header .p-menubar-submenu {
+    background-color: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    color: #0d76b6 !important;
 }
 
 .custom-shape-divider-bottom-light {

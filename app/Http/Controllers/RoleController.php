@@ -13,10 +13,31 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $roles = Role::query()
+            ->withCount('users')
+            ->when($request->input('name'),
+                fn ($query, $val) => $query->where('name', 'like', "%{$val}%")
+            )
+            ->when($request->input('sortField'), function ($query, $sortField) use ($request) {
+                $sortOrder = $request->input('sortOrder') == -1 ? 'desc' : 'asc';
+                $query->orderBy($sortField, $sortOrder);
+            }, function ($query) {
+                $query->latest();
+            })
+            ->paginate((int) $request->input('per_page', 10))
+            ->withQueryString();
+
+        $filters = $request->only(['name', 'sortField', 'sortOrder', 'per_page']);
+
+        if (isset($filters['sortOrder'])) {
+            $filters['sortOrder'] = (int) $filters['sortOrder'];
+        }
+
         return Inertia::render('users/roles/Index', [
-            'roles' => Role::withCount('users')->paginate(10),
+            'roles' => $roles,
+            'filters' => $filters,
         ]);
     }
 
@@ -47,7 +68,7 @@ class RoleController extends Controller
             $role->syncPermissions($request->permissions);
         }
 
-        return redirect()->route('users.roles.index');
+        return redirect()->route('users.roles.index')->with('success', 'Peran baru berhasil dibuat.');
     }
 
     public function edit(Role $role)
@@ -92,7 +113,7 @@ class RoleController extends Controller
             $role->syncPermissions([]);
         }
 
-        return redirect()->route('users.roles.index');
+        return redirect()->route('users.roles.index')->with('success', 'Data peran berhasil diperbarui.');
     }
 
     public function destroy(Role $role)
@@ -107,6 +128,6 @@ class RoleController extends Controller
 
         $role->delete();
 
-        return redirect()->route('users.roles.index');
+        return redirect()->route('users.roles.index')->with('success', 'Data peran berhasil dihapus.');
     }
 }

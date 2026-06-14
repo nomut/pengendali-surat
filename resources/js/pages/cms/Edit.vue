@@ -98,31 +98,31 @@ const submitForm = () => {
             <Card>
                 <template #title>
                     <h3 class="text-lg font-semibold">Edit Halaman: {{ page.title }}</h3>
-                    <p class="text-sm text-muted-color mt-1">Slug: <code class="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">{{ page.slug }}</code></p>
+                    <p class="text-sm text-muted-color mt-1 font-normal">Slug: <code class="bg-surface-100 dark:bg-surface-800 px-2 py-1 rounded text-sm">{{ page.slug }}</code></p>
                 </template>
                 <template #content>
                     <form @submit.prevent="submitForm">
                         <div class="flex flex-col gap-6">
                             <div>
-                                <label for="title" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Judul Halaman <span class="text-red-500">*</span></label>
-                                <InputText id="title" v-model="form.title" class="w-full" :class="{ 'p-invalid': form.errors.title }" />
-                                <small v-if="form.errors.title" class="p-error">{{ form.errors.title }}</small>
+                                <label for="title" class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Judul Halaman <span class="text-red-500">*</span></label>
+                                <InputText id="title" v-model="form.title" :invalid="Boolean(form.errors.title)" size="small" fluid />
+                                <small v-if="form.errors.title" class="text-red-500">{{ form.errors.title }}</small>
                             </div>
 
                             <div>
-                                <label for="content" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Konten Halaman</label>
+                                <label for="content" class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-1">Konten Halaman</label>
                                 <Editor v-model="form.content" editorStyle="height: 400px" />
-                                <small v-if="form.errors.content" class="p-error">{{ form.errors.content }}</small>
+                                <small v-if="form.errors.content" class="text-red-500">{{ form.errors.content }}</small>
                             </div>
 
                             <!-- Gambar Utama Section -->
-                            <div class="border border-slate-200 dark:border-slate-700 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Gambar Utama (Featured Image)</label>
+                            <div class="rounded-lg border dynamic-border bg-surface-50 dark:bg-surface-800/50 p-4">
+                                <label class="block text-xs font-medium text-surface-700 dark:text-surface-300 mb-3">Gambar Utama (Featured Image)</label>
                                 <div class="flex flex-col sm:flex-row gap-6">
-                                    <div class="w-full sm:w-64 h-40 bg-slate-200 dark:bg-slate-700 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600 flex items-center justify-center relative group shrink-0 shadow-inner">
+                                    <div class="w-full sm:w-64 h-40 bg-surface-100 dark:bg-surface-800 rounded-lg overflow-hidden border dynamic-border flex items-center justify-center relative group shrink-0 shadow-inner">
                                         <img v-if="form.meta.main_image" :src="getImageUrl(form.meta.main_image)" class="w-full h-full object-cover" />
-                                        <span v-else class="text-slate-400 dark:text-slate-500 text-sm">Belum ada gambar</span>
-                                        
+                                        <span v-else class="text-muted-color text-sm">Belum ada gambar</span>
+
                                         <label class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer text-white z-10 w-full h-full">
                                             <Upload class="w-6 h-6 mb-1" />
                                             <span class="text-xs font-semibold ml-2" v-if="isUploadingMainImage">Mengunggah...</span>
@@ -130,7 +130,7 @@ const submitForm = () => {
                                         </label>
                                     </div>
                                     <div class="flex flex-col justify-center gap-2">
-                                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                                        <p class="text-sm text-muted-color">
                                             Gambar ini akan digunakan sebagai banner utama di halaman publik.
                                         </p>
                                         <div v-if="form.meta.main_image">
@@ -144,24 +144,24 @@ const submitForm = () => {
                         </div>
 
                         <!-- Dynamic Meta Editor -->
-                        <div class="mt-8 border-t pt-8">
-                            <h3 class="text-xl font-bold text-slate-800 mb-6">Pengaturan Tambahan (Meta)</h3>
-                            
-                            <component 
-                                :is="activeMetaEditor" 
+                        <div class="mt-8 border-t dynamic-border pt-8">
+                            <h3 class="text-lg font-semibold text-color mb-6">Pengaturan Tambahan (Meta)</h3>
+
+                            <component
+                                :is="activeMetaEditor"
                                 v-if="activeMetaEditor"
-                                v-model="form.meta" 
+                                v-model="form.meta"
                             />
-                            <div v-else class="p-4 bg-slate-50 rounded text-slate-500 text-sm">
+                            <div v-else class="rounded-lg border dynamic-border bg-surface-50 dark:bg-surface-800/50 p-4 text-muted-color text-sm">
                                 Halaman ini tidak memiliki pengaturan meta khusus.
                             </div>
                         </div>
 
-                        <div class="flex justify-end space-x-2 mt-8">
+                        <div class="flex justify-end gap-2 mt-8">
                             <Link :href="route('cms.index')">
-                                <Button type="button" label="Batal" severity="secondary" outlined />
+                                <Button type="button" label="Batal" severity="secondary" outlined size="small" />
                             </Link>
-                            <Button type="submit" label="Simpan Perubahan" :loading="form.processing" />
+                            <Button type="submit" label="Simpan Perubahan" :loading="form.processing" size="small" />
                         </div>
                     </form>
                 </template>

@@ -55,11 +55,13 @@ const getImageUrl = (path) => {
             <section
                 class="relative h-64 md:h-80 flex items-center justify-center text-center bg-cover bg-center"
                 :style="{ backgroundImage: `url(${page?.meta?.main_image ? getImageUrl(page.meta.main_image) : homeBg})` }">
-                <div class="absolute inset-0 bg-black/60"></div>
+                <div class="absolute inset-0 bg-linear-to-b from-slate-900/70 via-slate-900/45 to-slate-900/70"></div>
                 <div v-animate-on-scroll class="animate-on-scroll relative container mx-auto px-4 sm:px-6 z-10 text-white">
+                    <span class="inline-block mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-sky-300">Profil</span>
                     <h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tighter mb-4 drop-shadow-md">
                         Tentang Kami
                     </h1>
+                    <div class="mx-auto mb-6 h-1 w-20 rounded-full bg-linear-to-r from-sky-400 to-cyan-300"></div>
                     <p class="text-lg text-slate-200 max-w-3xl mx-auto drop-shadow-sm">
                         Mengenal lebih dekat Gerakan Pemberdayaan dan Kesejahteraan Keluarga (PKK) di Daerah Istimewa Yogyakarta.
                     </p>
